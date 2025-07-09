@@ -1,10 +1,19 @@
-# Import QtColorScheme from libs, 0 = unknown, 1 = light, 2 = dark
-# Import QApplication from libs
-# Import QGuiApplication from libs
-
-from .libs import Qt, QApplication, QGuiApplication, QAsyncioEventLoop
+from .libs import Qt, QApplication, QGuiApplication, QAsyncioEventLoop, QObject, Signal, QTimer
 from PySide6.QtWidgets import QMainWindow
 import asyncio
+
+class AppSignalsListener(QObject):
+    appStarting = Signal()
+
+    def __init__(self, impl):
+        super().__init__()
+        self.impl = impl
+        self.interface = impl.interface
+        self.appStarting.connect(self.on_app_starting)
+        QTimer.singleShot(0, self.appStarting.emit)
+
+    def on_app_starting(self):
+        self.interface._startup()
 
 class App:
     # GTK apps exit when the last window is closed
@@ -19,6 +28,9 @@ class App:
         self.native = QApplication()
         self.loop = QAsyncioEventLoop(self.native)
         asyncio.set_event_loop(self.loop)
+        
+        # no idea what to name this...
+        self.signalslistener = AppSignalsListener(self)
 
     ######################################################################
     # Commands and menus

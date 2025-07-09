@@ -5,6 +5,7 @@ from .paths import Paths
 from .icons import Icon
 from .statusicons import MenuStatusIcon, SimpleStatusIcon, StatusIconSet
 from .window import MainWindow, Window
+from .command import Command
 
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "StatusIconSet",
     "Window",
     "MainWindow",
+    "Command",
 ]
 
 def not_implemented(feature):

@@ -1,4 +1,5 @@
 from .libs import QApplication, QMainWindow
+from toga.constants import WindowState
 
 
 class Window:
@@ -9,13 +10,14 @@ class Window:
         self.create()
 
         self.native.setWindowTitle(title)
-        self.native.resize(size[0], size[1])
-        self.native.move(position[0], position[1])
+        # self.native.resize(size[0], size[1])
+        # self.native.move(position[0], position[1])
     
     def create(self):
         self.native = QMainWindow()
 
     def show(self):
+        print("QWindow Show")
         self.native.show()
 
     def set_title(self, title):
@@ -29,6 +31,18 @@ class Window:
 
     def set_position(self, position):
         self.native.move(position[0], position[1])
+
+    def set_app(self, app):
+        pass
+    
+    def get_visible(self):
+        return False
+
+    def create_toolbar(self):
+        pass
+    
+    def get_window_state(self, in_progress_state=False):
+        return WindowState.NORMAL
 
 
 class MainWindow(Window):
