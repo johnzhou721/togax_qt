@@ -1,17 +1,22 @@
 import toga
 from toga.style.pack import COLUMN, ROW
 import threading
+import random
+import time
+from PySide6 import QtAsyncio
+
+def my_coroutine():
+    try:
+        print("Hello from coroutine!")
+        print("Finished!")
+    except Exception as e:
+        print(e)
 
 class HelloWorld(toga.App):
-    def beepprint(self):
-        print("Beep")
-        self.beep()
     def startup(self):
         self.main_window = toga.MainWindow(title=self.formal_name)
-        print("Startup")
         self.main_window.show()
-        print("Should be shown")
-        timer = threading.Timer(5.0, self.beepprint)
-        timer.start()
+        print(self.loop.is_running())
+        self.loop.call_later(5, my_coroutine)
 
 HelloWorld("HelloWorld", "com.example.helloworld").main_loop()
