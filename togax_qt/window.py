@@ -10,8 +10,9 @@ class Window:
         self.create()
 
         self.native.setWindowTitle(title)
-        # self.native.resize(size[0], size[1])
-        # self.native.move(position[0], position[1])
+        self.native.resize(size[0], size[1])
+        if position is not None:
+            self.native.move(position[0], position[1])
     
     def create(self):
         self.native = QMainWindow()
@@ -33,15 +34,18 @@ class Window:
         self.native.move(position[0], position[1])
 
     def set_app(self, app):
+        # you don't set the app a window belongs to, all windows
+        # instantiated belongs to your only QApplication
         pass
-    
+
     def get_visible(self):
-        return False
+        return self.native.isVisible()
 
     def create_toolbar(self):
         pass
     
     def get_window_state(self, in_progress_state=False):
+        # Stub.
         return WindowState.NORMAL
 
 

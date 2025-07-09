@@ -112,7 +112,7 @@ class App:
     ######################################################################
 
     def get_current_window(self):
-        return None
+        return self.native.activeWindow()
 
     def set_current_window(self, window):
-        pass
+        self.native.setActiveWindow(window)
