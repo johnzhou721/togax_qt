@@ -1,4 +1,4 @@
-from .libs import Qt, QApplication, QGuiApplication, QAsyncioEventLoop, QObject, Signal, QTimer, QAsyncioTask
+from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer
 from PySide6.QtWidgets import QMainWindow
 import asyncio
 
@@ -15,9 +15,6 @@ class AppSignalsListener(QObject):
     def on_app_starting(self):
         self.interface._startup()
 
-def gtk_task_factory(loop, coro, **kwargs):
-    return QAsyncioTask(coro, loop=loop, **kwargs)
-
 class App:
     # GTK apps exit when the last window is closed
     CLOSE_ON_LAST_WINDOW = True
@@ -29,9 +26,10 @@ class App:
         self.interface._impl = self
         
         self.native = QApplication()
-        self.loop = QAsyncioEventLoop(self.native)
-        self.loop.set_task_factory(gtk_task_factory)
+        self.loop = QEventLoop(self.native)
         asyncio.set_event_loop(self.loop)
+        self.app_close_event = asyncio.Event()
+        self.native.aboutToQuit.connect(self.app_close_event.set)
         
         # no idea what to name this...
         self.signalslistener = AppSignalsListener(self)
@@ -59,8 +57,7 @@ class App:
         self.native.quit()
 
     def main_loop(self):
-        #self.native.exec()
-        self.native.exec()
+        self.loop.run_until_complete(self.app_close_event.wait())
 
     # Not implemented yet
     def set_icon(self, icon):
