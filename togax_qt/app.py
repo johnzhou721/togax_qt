@@ -73,8 +73,11 @@ class App:
 
     # ScreenImpl not impl'd yet
     def get_screens(self):
-        # return [ScreenImpl(native=monitor) for monitor in QGuiApplication.screens()]
-        pass
+        screens = QGuiApplication.screens()
+        primary = QGuiApplication.primaryScreen()
+        screens = [primary] + [s for s in screens if s != primary]  # Ensure first is primary
+
+        return [ScreenImpl(native=monitor) for monitor in QGuiApplication.screens()]
 
     ######################################################################
     # App state

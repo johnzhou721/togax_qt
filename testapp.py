@@ -16,8 +16,11 @@ async def my_coroutine():
 class HelloWorld(toga.App):
     def startup(self):
         self.main_window = toga.MainWindow(title=self.formal_name)
+        #self.main_window = toga.App.BACKGROUND
         self.main_window.show()
         print(self.loop.is_running())
         self.loop.create_task(my_coroutine())
+        print(self.screens[0].size)
+        print(self.screens[0].name)
 
 HelloWorld("HelloWorld", "com.example.helloworld").main_loop()
