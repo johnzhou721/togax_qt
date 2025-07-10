@@ -1,6 +1,7 @@
 from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer
 from PySide6.QtWidgets import QMainWindow
 import asyncio
+from .screens import Screen as ScreenImpl
 
 class AppSignalsListener(QObject):
     appStarting = Signal()

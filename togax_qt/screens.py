@@ -18,7 +18,7 @@ class Screen:
             return instance
 
     def get_name(self):
-        return self.native.name()
+        return '|'.join([self.native.name(), self.native.model(), self.native.manufacturer(), self.native.serialNumber()])
 
     def get_origin(self) -> Position:
         return self.native.geometry().topLeft()
@@ -28,7 +28,7 @@ class Screen:
         return Size(geometry.width(), geometry.height())
 
     def get_image_data(self):
-        grabbed = self.native.grabWindow()
+        grabbed = self.native.grabWindow(0)
         byte_array = QByteArray()
         buffer = QBuffer(byte_array)
         buffer.open(QIODevice.WriteOnly)

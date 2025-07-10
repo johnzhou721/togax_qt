@@ -2,3 +2,5 @@
 __pycache__/
 *.py[cod]
 
+# The output of my test program to test screenshot taking
+output.png
