@@ -1,5 +1,6 @@
 import toga
 from toga.style.pack import COLUMN, ROW
+from PySide6.QtGui import QGuiApplication
 import threading
 import random
 import time
@@ -28,6 +29,8 @@ class HelloWorld(toga.App):
         print(self.screens[0].size)
         print(self.screens[0].name)
         self.loop.create_task(grab(self))
+        platform = QGuiApplication.platformName()
+        print(platform)
         
 
 HelloWorld("HelloWorld", "com.example.helloworld").main_loop()
