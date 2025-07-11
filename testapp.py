@@ -1,3 +1,7 @@
+import os
+
+os.environ["TOGA_BACKEND"] = "togax_qt"
+
 import toga
 from toga.style.pack import COLUMN, ROW
 from PySide6.QtGui import QGuiApplication

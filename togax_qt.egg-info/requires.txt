@@ -1,0 +1,3 @@
+toga-core
+qasync@ git+https://github.com/johnzhou721/qasync.git#egg=qasync
+pep508
