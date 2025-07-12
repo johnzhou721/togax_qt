@@ -6,6 +6,7 @@ from .icons import Icon
 from .statusicons import MenuStatusIcon, SimpleStatusIcon, StatusIconSet
 from .window import MainWindow, Window
 from .command import Command
+from .widgets.button import Button
 
 
 __all__ = [
@@ -19,6 +20,7 @@ __all__ = [
     "Window",
     "MainWindow",
     "Command",
+    "Button",
 ]
 
 def not_implemented(feature):

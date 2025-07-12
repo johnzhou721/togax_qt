@@ -1,40 +1,21 @@
-import os
-
-os.environ["TOGA_BACKEND"] = "togax_qt"
-
 import toga
-from toga.style.pack import COLUMN, ROW
-from PySide6.QtGui import QGuiApplication
-import threading
-import random
-import time
-import asyncio
+from toga.style import Pack
+from toga.style.pack import CENTER
 
-async def my_coroutine():
-    try:
-        print("Hello from coroutine!")
-        await asyncio.sleep(1)
-        print("Finished!")
-    except Exception as e:
-        print(e)
+def button_handler(widget):
+    print("Button clicked!")
 
-async def grab(self):
-    await asyncio.sleep(1)
-    with open('output.png', 'wb') as f:
-        f.write(self.screens[0]._impl.get_image_data())
+def build(app):
+    # Create a button and set its on_press handler
+    button = toga.Button('Click Me', on_press=button_handler, style=Pack(padding=20))
+    
+    
+    return button
 
-class HelloWorld(toga.App):
-    def startup(self):
-        self.main_window = toga.MainWindow(title=self.formal_name)
-        #self.main_window = toga.App.BACKGROUND
-        self.main_window.show()
-        print(self.loop.is_running())
-        self.loop.create_task(my_coroutine())
-        print(self.screens[0].size)
-        print(self.screens[0].name)
-        self.loop.create_task(grab(self))
-        platform = QGuiApplication.platformName()
-        print(platform)
-        
+def main():
+    return toga.App('Simple Button App', 'org.example.simplebutton', startup=build)
 
-HelloWorld("HelloWorld", "com.example.helloworld").main_loop()
+if __name__ == '__main__':
+    app = main()
+    app.main_loop()
+

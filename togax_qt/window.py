@@ -47,6 +47,9 @@ class Window:
     def get_window_state(self, in_progress_state=False):
         # Stub.
         return WindowState.NORMAL
+    
+    def set_content(self, widget):
+    	self.native.setCentralWidget(widget.native)
 
 
 class MainWindow(Window):

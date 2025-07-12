@@ -111,4 +111,4 @@ class Widget:
         height = self.native.sizeHint().height()
 
         self.interface.intrinsic.width = at_least(width)
-        self.interface.intrinsic.height = at_least(heightt)
+        self.interface.intrinsic.height = at_least(height)

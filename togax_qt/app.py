@@ -1,5 +1,4 @@
-from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer
-from PySide6.QtWidgets import QMainWindow
+from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer, QMainWindow
 import asyncio
 from .screens import Screen as ScreenImpl
 
