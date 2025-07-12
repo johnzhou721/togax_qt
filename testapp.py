@@ -11,7 +11,7 @@ def button_handler(widget):
 
 def build(app):
     # Create a button and set its on_press handler
-    button = toga.Button('Click Me', on_press=button_handler, style=Pack(padding=20))
+    button = toga.Button('Click Me', on_press=button_handler, style=Pack(margin=100))
     
     
     return button
