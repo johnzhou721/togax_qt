@@ -4,3 +4,38 @@ __pycache__/
 
 # The output of my test program to test screenshot taking
 output.png
+
+# Upstream gitignore
+*.pyc
+*~
+.*.sw[op]
+*.egg-info
+*.dist-info
+.eggs
+.coverage
+.coverage.*
+coverage.xml
+dist
+build
+logs
+_build
+distribute-*
+docs/env
+local
+*venv*
+.idea
+Pipfile*
+.tox
+node_modules
+gtk/gi
+gtk/pygtkcompat
+gtk/cairo
+.DS_Store
+pip-selfcheck.json
+pyvenv.cfg
+.vscode
+.envrc
+bin/
+lib/
+.ruff_cache/
+

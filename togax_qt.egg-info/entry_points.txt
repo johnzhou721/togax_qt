@@ -1,5 +1,0 @@
-[toga.backends]
-freeBSD = togax_qt
-linux = togax_qt
-macOS = togax_qt
-windows = togax_qt
