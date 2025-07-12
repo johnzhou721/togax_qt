@@ -1,3 +1,7 @@
+import os
+
+os.environ['TOGA_BACKEND'] = 'togax_qt'
+
 import toga
 from toga.style import Pack
 from toga.style.pack import CENTER

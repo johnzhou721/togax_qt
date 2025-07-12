@@ -1,5 +1,7 @@
 from .libs import QApplication, QMainWindow
 from toga.constants import WindowState
+from toga.types import Position, Size
+from .screens import Screen as ScreenImpl
 
 
 class Window:
@@ -14,21 +16,45 @@ class Window:
         if position is not None:
             self.native.move(position[0], position[1])
     
+    def create_container(self):
+        pass  # no container impl
+    
     def create(self):
         self.native = QMainWindow()
 
     def show(self):
-        print("QWindow Show")
         self.native.show()
+    
+    def set_app(self, app):
+        # Haven't worked this part out yet, but it's automatically set...
+        pass
+    
+    def close(self):
+        self.native.close()
+    
+    def get_title(self):
+        self.native.windowTitle()
 
     def set_title(self, title):
         self.native.setWindowTitle(title)
-
-    def close(self):
-        self.native.close()
+    
+    def get_size(self):
+        return Size(
+            self.native.size().width,
+            self.native.size().height,
+        )
 
     def set_size(self, size):
         self.native.resize(size[0], size[1])
+    
+    def get_current_screen(self):
+        return ScreenImpl(self.native.screen())
+    
+    def get_position(self) -> Position:
+        return Position(self.native.position().x(), self.native.position().y())
+
+    def set_position(self, position):
+        self.native.setPosition(position.x, position.y)
 
     def set_position(self, position):
         self.native.move(position[0], position[1])
@@ -41,18 +67,26 @@ class Window:
     def get_visible(self):
         return self.native.isVisible()
 
-    def create_toolbar(self):
-        pass
-    
+    # =============== STUBS FOR WINDOW STATES ================
     def get_window_state(self, in_progress_state=False):
         # Stub.
         return WindowState.NORMAL
+    
+    def set_window_state(self, state):
+        pass
+    
+    # ============== STUB =============
+    
+    def get_image_data(self):
+        pass
+
     
     def set_content(self, widget):
     	self.native.setCentralWidget(widget.native)
 
 
 class MainWindow(Window):
-    def __init__(self, interface, title, position, size):
-        super().__init__(interface, title, position, size)
-
+    def create_menus(self):
+        pass
+    def create_toolbar(self):
+        pass
