@@ -8,6 +8,8 @@ class Container:
         self.on_refresh = on_refresh
 
         self.content = content  # Set initial content
+        
+        print(self)
 
     def __del__(self):
         self.native = None

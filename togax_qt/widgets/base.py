@@ -19,6 +19,7 @@ class Widget:
 
     @container.setter
     def container(self, container):
+        print("Set Container", self.container, container)
         if self.container:
             assert container is None, f"{self} already has a container"
 
@@ -27,6 +28,7 @@ class Widget:
             self._container = None
         elif container:
             # setting container
+            print("SET CONT", container.native.window())
             self._container = container
             self.native.setParent(container.native)
 

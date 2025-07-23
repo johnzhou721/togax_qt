@@ -7,9 +7,9 @@ from .statusicons import MenuStatusIcon, SimpleStatusIcon, StatusIconSet
 from .window import MainWindow, Window
 from .command import Command
 from .widgets.button import Button
+from .widgets.box import Box
 from .fonts import Font
 from .container import Container
-
 
 __all__ = [
     "not_implemented",
@@ -24,7 +24,8 @@ __all__ = [
     "Command",
     "Button",
     "Font",
-    "Container"
+    "Container",
+    "Box"
 ]
 
 def not_implemented(feature):
