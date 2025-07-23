@@ -8,6 +8,7 @@ from .window import MainWindow, Window
 from .command import Command
 from .widgets.button import Button
 from .fonts import Font
+from .container import Container
 
 
 __all__ = [
@@ -23,6 +24,7 @@ __all__ = [
     "Command",
     "Button",
     "Font",
+    "Container"
 ]
 
 def not_implemented(feature):

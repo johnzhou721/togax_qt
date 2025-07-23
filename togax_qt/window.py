@@ -1,7 +1,8 @@
-from .libs import QApplication, QMainWindow
+from .libs import QApplication, QMainWindow, QVBoxLayout
 from toga.constants import WindowState
 from toga.types import Position, Size
 from .screens import Screen as ScreenImpl
+from .container import Container
 
 
 class Window:
@@ -10,11 +11,16 @@ class Window:
         self.interface._impl = self
 
         self.create()
+        self.container = Container()
+        self.native.setCentralWidget(self.container.native)
 
         self.native.setWindowTitle(title)
         self.native.resize(size[0], size[1])
         if position is not None:
             self.native.move(position[0], position[1])
+        
+        self.native.resizeEvent = self.resizeEvent
+        
     
     def create_container(self):
         pass  # no container impl
@@ -46,7 +52,10 @@ class Window:
 
     def set_size(self, size):
         self.native.resize(size[0], size[1])
-    
+ 
+    def resizeEvent(self, event):
+        self.interface.content.refresh()
+ 
     def get_current_screen(self):
         return ScreenImpl(self.native.screen())
     
@@ -82,7 +91,8 @@ class Window:
 
     
     def set_content(self, widget):
-    	self.native.setCentralWidget(widget.native)
+        self.container.content = widget
+
 
 
 class MainWindow(Window):

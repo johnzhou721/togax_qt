@@ -38,3 +38,10 @@ class Button(Widget):
         # Not impl'd yet
         pass
     
+    def rehint(self):
+        width = self.native.sizeHint().width()
+        height = self.native.sizeHint().height()
+
+        self.interface.intrinsic.width = at_least(width)
+        self.interface.intrinsic.height = height  # height of a button is known
+    
