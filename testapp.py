@@ -12,8 +12,8 @@ def button_handler(widget):
 def build(app):
     box = toga.Box()
 
-    label = toga.Label("Hello!")
-    button = toga.Button("Hello world", on_press=button_handler)
+    label = toga.Label("Hello! World! Hello! Hello! World! Hello!Hello! World! Hello! Hello! World! Hello!Hello! World! Hello! Hello! World! Hello!Hello! World! Hello! Hello! World! Hello!", width=100)
+    button = toga.Button("Hello world", on_press=button_handler, flex=1)
     box.add(label)
     box.add(button)
 
