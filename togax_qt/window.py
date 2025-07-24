@@ -20,7 +20,6 @@ class Window:
             self.native.move(position[0], position[1])
         
         self.native.resizeEvent = self.resizeEvent
-        print(self.native)
     
     def create_container(self):
         pass  # no container impl

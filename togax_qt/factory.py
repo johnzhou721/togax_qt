@@ -11,6 +11,7 @@ from .widgets.box import Box
 from .fonts import Font
 from .container import Container
 from .widgets.label import Label
+from .widgets.textinput import TextInput
 
 __all__ = [
     "not_implemented",
@@ -28,6 +29,7 @@ __all__ = [
     "Container",
     "Box",
     "Label",
+    "TextInput",
 ]
 
 def not_implemented(feature):
