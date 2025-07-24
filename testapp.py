@@ -3,29 +3,26 @@ import os
 os.environ['TOGA_BACKEND'] = 'togax_qt'
 
 import toga
-from toga.style import Pack
-from toga.style.pack import CENTER
+
 
 def button_handler(widget):
-    print("Button clicked!")
+    print("hello")
 
-def button_handler2(widget):
-    print("Button2 clicked!")
 
 def build(app):
-    # Create a button and set its on_press handler
     box = toga.Box()
-    
-    button = toga.Button('Click Me', on_press=button_handler, style=Pack(margin=100))
-    
+
+    label = toga.Label("Hello!")
+    button = toga.Button("Hello world", on_press=button_handler)
+    box.add(label)
     box.add(button)
-    
-    return button
+
+    return box
+
 
 def main():
-    return toga.App('Simple Button App', 'org.example.simplebutton', startup=build)
+    return toga.App("First App", "org.beeware.toga.examples.tutorial", startup=build)
 
-if __name__ == '__main__':
-    app = main()
-    app.main_loop()
 
+if __name__ == "__main__":
+    main().main_loop()

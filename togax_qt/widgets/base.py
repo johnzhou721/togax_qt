@@ -12,6 +12,7 @@ class Widget:
         self._container = None
         self.native = None
         self.create()
+        self.native.hide()
     
     @property
     def container(self):

@@ -10,6 +10,7 @@ from .widgets.button import Button
 from .widgets.box import Box
 from .fonts import Font
 from .container import Container
+from .widgets.label import Label
 
 __all__ = [
     "not_implemented",
@@ -25,7 +26,8 @@ __all__ = [
     "Button",
     "Font",
     "Container",
-    "Box"
+    "Box",
+    "Label",
 ]
 
 def not_implemented(feature):
