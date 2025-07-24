@@ -1,4 +1,5 @@
 from travertino.size import at_least
+from travertino.constants import LEFT, CENTER, RIGHT
 
 from ..libs import QLabel, Qt
 from .base import Widget
@@ -10,12 +11,12 @@ class Label(Widget):
         self.native.setWordWrap(True)
 
     def set_text_align(self, value):
-        alignment_map = {
-            0: Qt.AlignmentFlag.AlignLeft,
-            1: Qt.AlignmentFlag.AlignCenter,
-            2: Qt.AlignmentFlag.AlignRight,
-        }
-        self.native.setAlignment(alignment_map.get(value, Qt.AlignmentFlag.AlignLeft))
+        alignment = {
+            LEFT: Qt.AlignmentFlag.AlignLeft,
+            CENTER: Qt.AlignmentFlag.AlignCenter,
+            RIGHT: Qt.AlignmentFlag.AlignRight,
+        }.get(value, Qt.AlignLeft)
+        self.native.setAlignment(alignment)
 
     def set_color(self, value):
         pass

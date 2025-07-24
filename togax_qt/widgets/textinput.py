@@ -1,4 +1,5 @@
 from travertino.size import at_least
+from travertino.constants import LEFT, CENTER, RIGHT
 
 from ..libs import QEvent, QLineEdit, QObject, Qt
 from .base import Widget
@@ -50,9 +51,9 @@ class TextInput(Widget):
 
     def set_text_align(self, value):
         alignment = {
-            "left": Qt.AlignLeft,
-            "center": Qt.AlignHCenter,
-            "right": Qt.AlignRight,
+            LEFT: Qt.AlignLeft,
+            CENTER: Qt.AlignHCenter,
+            RIGHT: Qt.AlignRight,
         }.get(value, Qt.AlignLeft)
         self.native.setAlignment(alignment)
 
