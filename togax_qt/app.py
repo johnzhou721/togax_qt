@@ -1,4 +1,4 @@
-from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer, QMainWindow
+from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer
 import asyncio
 from .screens import Screen as ScreenImpl
 

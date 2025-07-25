@@ -1,4 +1,4 @@
-from .libs import QApplication, QMainWindow, QVBoxLayout
+from .libs import QMainWindow
 from toga.constants import WindowState
 from toga.types import Position, Size
 from .screens import Screen as ScreenImpl
@@ -29,11 +29,7 @@ class Window:
 
     def show(self):
         self.native.show()
-    
-    def set_app(self, app):
-        # Haven't worked this part out yet, but it's automatically set...
-        pass
-    
+
     def close(self):
         self.native.close()
     
@@ -53,16 +49,14 @@ class Window:
         self.native.resize(size[0], size[1])
  
     def resizeEvent(self, event):
-        self.interface.content.refresh()
+        if self.interface.content:
+            self.interface.content.refresh()
  
     def get_current_screen(self):
         return ScreenImpl(self.native.screen())
     
     def get_position(self) -> Position:
         return Position(self.native.position().x(), self.native.position().y())
-
-    def set_position(self, position):
-        self.native.setPosition(position.x, position.y)
 
     def set_position(self, position):
         self.native.move(position[0], position[1])

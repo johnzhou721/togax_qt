@@ -1,7 +1,7 @@
 from toga.screens import Screen as ScreenInterface
 from toga.types import Position, Size
 
-from .libs import QScreen, QByteArray, QBuffer, QIODevice
+from .libs import QByteArray, QBuffer, QIODevice
 
 
 class Screen:

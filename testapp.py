@@ -25,6 +25,14 @@ def build(app):
             c_input.value = "???"
 
     button = toga.Button("Calculate", on_press=calculate)
+    
+    def showwindow(widget):
+        wind = toga.Window(title="Toga", position=(800, 200), size=(300, 250))
+        but = toga.Button("Hello!")
+        wind.content = but
+        wind.show()
+    
+    show = toga.Button("Show Window", on_press=showwindow)
 
     f_box.add(f_input)
     f_box.add(f_label)
@@ -36,6 +44,7 @@ def build(app):
     box.add(f_box)
     box.add(c_box)
     box.add(button)
+    box.add(show)
 
     box.style.update(direction=COLUMN, margin=10, gap=10)
     f_box.style.update(direction=ROW, gap=10)

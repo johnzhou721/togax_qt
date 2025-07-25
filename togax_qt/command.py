@@ -1,6 +1,4 @@
-import sys
 
-from toga import Command as StandardCommand, Group, Key
 
 
 class Command:

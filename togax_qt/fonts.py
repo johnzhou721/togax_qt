@@ -1,6 +1,6 @@
 import warnings
 
-from toga.fonts import _IMPL_CACHE, UnknownFontError
+from toga.fonts import _IMPL_CACHE
 
 
 _CUSTOM_FONT_NAMES = {}
