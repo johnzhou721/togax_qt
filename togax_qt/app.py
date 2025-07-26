@@ -2,6 +2,7 @@ from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal
 import asyncio
 from .screens import Screen as ScreenImpl
 
+
 class AppSignalsListener(QObject):
     appStarting = Signal()
 
@@ -15,6 +16,7 @@ class AppSignalsListener(QObject):
     def on_app_starting(self):
         self.interface._startup()
 
+
 class App:
     # GTK apps exit when the last window is closed
     CLOSE_ON_LAST_WINDOW = True
@@ -24,13 +26,13 @@ class App:
     def __init__(self, interface):
         self.interface = interface
         self.interface._impl = self
-        
+
         self.native = QApplication()
         self.loop = QEventLoop(self.native)
         asyncio.set_event_loop(self.loop)
         self.app_close_event = asyncio.Event()
         self.native.aboutToQuit.connect(self.app_close_event.set)
-        
+
         # no idea what to name this...
         self.signalslistener = AppSignalsListener(self)
 
@@ -61,7 +63,7 @@ class App:
 
     # Not implemented yet
     def set_icon(self, icon):
-    	self.interface.factory.not_implemented("App.set_icon()")
+        self.interface.factory.not_implemented("App.set_icon()")
 
     # Not implemented yet
     def set_main_window(self, window):
@@ -75,7 +77,9 @@ class App:
     def get_screens(self):
         screens = QGuiApplication.screens()
         primary = QGuiApplication.primaryScreen()
-        screens = [primary] + [s for s in screens if s != primary]  # Ensure first is primary
+        screens = [primary] + [
+            s for s in screens if s != primary
+        ]  # Ensure first is primary
 
         return [ScreenImpl(native=monitor) for monitor in QGuiApplication.screens()]
 

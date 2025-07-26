@@ -1,5 +1,6 @@
 from .libs import QWidget
 
+
 class Container:
     def __init__(self, content=None, layout_native=None, on_refresh=None):
         self.native = QWidget()

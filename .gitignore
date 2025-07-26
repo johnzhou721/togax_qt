@@ -38,4 +38,3 @@ pyvenv.cfg
 bin/
 lib/
 .ruff_cache/
-

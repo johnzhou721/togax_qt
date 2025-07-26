@@ -17,16 +17,11 @@ class Font:
         )
 
     def load_user_registered_font(self):
-        warnings.warn(
-            "load_user_registered_font stub not implemented", RuntimeWarning
-        )
+        warnings.warn("load_user_registered_font stub not implemented", RuntimeWarning)
 
     def load_arbitrary_system_font(self):
-        warnings.warn(
-            "Arbitrary system fonts not yet supported on iOS", RuntimeWarning
-        )
+        warnings.warn("Arbitrary system fonts not yet supported on iOS", RuntimeWarning)
 
     def _assign_native(self, font_name):
         self.native = None
         _IMPL_CACHE[self.interface] = self
-

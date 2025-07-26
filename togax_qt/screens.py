@@ -18,7 +18,14 @@ class Screen:
             return instance
 
     def get_name(self):
-        return '|'.join([self.native.name(), self.native.model(), self.native.manufacturer(), self.native.serialNumber()])
+        return "|".join(
+            [
+                self.native.name(),
+                self.native.model(),
+                self.native.manufacturer(),
+                self.native.serialNumber(),
+            ]
+        )
 
     def get_origin(self) -> Position:
         return self.native.geometry().topLeft()

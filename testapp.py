@@ -1,6 +1,6 @@
 import os
 
-os.environ['TOGA_BACKEND'] = 'togax_qt'
+os.environ["TOGA_BACKEND"] = "togax_qt"
 
 import toga
 from toga.style.pack import COLUMN, LEFT, RIGHT, ROW, Pack
@@ -25,15 +25,16 @@ def build(app):
             c_input.value = "???"
 
     button = toga.Button("Calculate", on_press=calculate)
-    
+
     def showwindow(widget):
         def handler(widget):
             print("hello!1")
+
         wind = toga.Window(title="Toga", position=(800, 200), size=(300, 250))
         but = toga.Button("Hello!", on_press=handler)
         wind.content = but
         wind.show()
-    
+
     show = toga.Button("Show Window", on_press=showwindow)
 
     f_box.add(f_input)

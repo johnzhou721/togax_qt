@@ -5,7 +5,6 @@ from travertino.size import at_least
 from ..libs import Qt
 
 
-
 class Widget:
     def __init__(self, interface):
         self.interface = interface
@@ -13,7 +12,7 @@ class Widget:
         self.native = None
         self.create()
         self.native.hide()
-    
+
     @property
     def container(self):
         return self._container

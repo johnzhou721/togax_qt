@@ -3,6 +3,7 @@ import toga
 
 # STUB IMPL
 
+
 class StatusIcon:
     def __init__(self, interface):
         self.interface = interface

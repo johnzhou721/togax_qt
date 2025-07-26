@@ -16,9 +16,9 @@ class Window:
         self.native.resize(size[0], size[1])
         if position is not None:
             self.native.move(position[0], position[1])
-        
+
         self.native.resizeEvent = self.resizeEvent
-    
+
     def create(self):
         self.container = Container()
         self.native = self.container.native
@@ -28,13 +28,13 @@ class Window:
 
     def close(self):
         self.native.close()
-    
+
     def get_title(self):
         self.native.windowTitle()
 
     def set_title(self, title):
         self.native.setWindowTitle(title)
-    
+
     def get_size(self):
         return Size(
             self.native.size().width,
@@ -43,14 +43,14 @@ class Window:
 
     def set_size(self, size):
         self.native.resize(size[0], size[1])
- 
+
     def resizeEvent(self, event):
         if self.interface.content:
             self.interface.content.refresh()
- 
+
     def get_current_screen(self):
         return ScreenImpl(self.native.screen())
-    
+
     def get_position(self) -> Position:
         return Position(self.native.position().x(), self.native.position().y())
 
@@ -69,19 +69,17 @@ class Window:
     def get_window_state(self, in_progress_state=False):
         # Stub.
         return WindowState.NORMAL
-    
+
     def set_window_state(self, state):
         pass
-    
+
     # ============== STUB =============
-    
+
     def get_image_data(self):
         pass
 
-    
     def set_content(self, widget):
         self.container.content = widget
-
 
 
 class MainWindow(Window):
@@ -89,7 +87,9 @@ class MainWindow(Window):
         self.native = QMainWindow()
         self.container = Container()
         self.native.setCentralWidget(self.container.native)
+
     def create_menus(self):
         pass
+
     def create_toolbar(self):
         pass

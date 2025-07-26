@@ -1,5 +1,6 @@
 # Stub impl
 
+
 class Icon:
     EXTENSIONS = [".png", ".bmp", ".ico"]
     SIZES = None

@@ -75,14 +75,10 @@ class TextInput(Widget):
         self.interface.intrinsic.height = size.height()
 
     def set_error(self, error_message):
-        warnings.warn(
-            "set_error stub not implemented", RuntimeWarning
-        )
+        warnings.warn("set_error stub not implemented", RuntimeWarning)
 
     def clear_error(self):
-        warnings.warn(
-            "clear_error stub not implemented", RuntimeWarning
-        )
+        warnings.warn("clear_error stub not implemented", RuntimeWarning)
 
     def is_valid(self):
         return self.native.toolTip() == ""
