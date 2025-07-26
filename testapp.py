@@ -69,6 +69,7 @@ def main():
         "Temperature Converter",
         "org.beeware.toga.examples.tutorial",
         startup=build,
+        home_page="https://github.com/johnzhou721",
     )
 
 

@@ -115,8 +115,8 @@ class Command:
         for widget in self.native:
             widget.setEnabled(enabled)
 
-    def qt_click():
-        pass  # interface call
+    def qt_click(self):
+        self.interface.action()  # interface call
 
     def create_menu_item(self):
         item = QAction(self.interface.text)

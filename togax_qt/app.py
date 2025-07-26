@@ -44,9 +44,6 @@ class App:
     def create_standard_commands(self):
         pass
 
-    def _submenu(self, group, menubar):
-        pass
-
     def create_menus(self):
         for window in self.interface.windows:
             if hasattr(window._impl, "create_menus"):
