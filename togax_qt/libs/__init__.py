@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,  # noqa: F401
     QLabel,  # noqa: F401
     QLineEdit,  # noqa: F401
+    QMenu,  # noqa: F401
 )
-from PySide6.QtGui import QGuiApplication, QWindow, QScreen  # noqa: F401
+from PySide6.QtGui import QGuiApplication, QWindow, QScreen, QAction, QKeySequence  # noqa: F401
 from qasync import QEventLoop  # noqa: F401

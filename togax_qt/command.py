@@ -9,6 +9,10 @@ import sys
 
 from toga import Command as StandardCommand, Group, Key
 
+from .keys import toga_to_qt_key
+
+from .libs import QAction
+
 # Is the order even correct??? Why doesn't GTK pre-provide
 # menu bars???
 # Will this monkeypatch even work? (hack hack hack)
@@ -110,3 +114,26 @@ class Command:
         enabled = self.interface.enabled
         for widget in self.native:
             widget.setEnabled(enabled)
+
+    def qt_click():
+        pass  # interface call
+
+    def create_menu_item(self):
+        item = QAction(self.interface.text)
+        item.triggered.connect(self.qt_click)
+
+        # Transition from here below
+
+        if self.interface.shortcut is not None:
+            # try:
+            item.setShortcut(toga_to_qt_key(self.interface.shortcut))
+        #            except (???) as e:  # pragma: no cover
+        #                # Make this a non-fatal warning, because different backends may
+        #                # accept different shortcuts.
+        #                print(f"WARNING: invalid shortcut {self.interface.shortcut!r}: {e}")
+
+        item.setEnabled(self.interface.enabled)
+
+        self.native.append(item)
+
+        return item

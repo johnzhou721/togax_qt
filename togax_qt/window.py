@@ -1,6 +1,7 @@
-from .libs import QMainWindow
+from .libs import QMainWindow, QMenu
 from toga.constants import WindowState
 from toga.types import Position, Size
+from toga.command import Separator
 from .screens import Screen as ScreenImpl
 from .container import Container
 
@@ -88,8 +89,32 @@ class MainWindow(Window):
         self.container = Container()
         self.native.setCentralWidget(self.container.native)
 
+    def _submenu(self, group, group_cache):
+        try:
+            return group_cache[group]
+        except KeyError:
+            parent_menu = self._submenu(group.parent, group_cache)
+            submenu = QMenu(group.text)
+            parent_menu.addMenu(submenu)
+
+        group_cache[group] = submenu
+        return submenu
+
     def create_menus(self):
-        pass
+        # Creates and returns an empty one if does not exist
+        # out of the box, can't hurt to clear contents again
+        # below even if this happens
+        menubar = self.native.menuBar()
+        menubar.clear()
+
+        group_cache = {None: menubar}
+        submenu = None
+        for cmd in self.interface.app.commands:
+            submenu = self._submenu(cmd.group, group_cache)
+            if isinstance(cmd, Separator):
+                submenu.addSeparator()
+            else:
+                submenu.addAction(cmd._impl.create_menu_item())
 
     def create_toolbar(self):
         pass

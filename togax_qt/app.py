@@ -48,7 +48,9 @@ class App:
         pass
 
     def create_menus(self):
-        pass
+        for window in self.interface.windows:
+            if hasattr(window._impl, "create_menus"):
+                window._impl.create_menus()
 
     ######################################################################
     # App lifecycle
