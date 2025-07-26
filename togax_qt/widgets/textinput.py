@@ -6,6 +6,10 @@ from .base import Widget
 import warnings
 
 
+# Note: This extra class is made because you MUST inherit
+# from QObject to use an event filter, however I'm extremely
+# afraid of any method name collisions that may happen if we
+# do it on the main TextInput...
 class TextInputListener(QObject):
     def __init__(self, impl):
         super().__init__()
@@ -16,7 +20,7 @@ class TextInputListener(QObject):
         self.native.textChanged.connect(self.qt_on_change)
         self.native.returnPressed.connect(self.qt_on_confirm)
         self.native.installEventFilter(self)
-        
+
     def qt_on_change(self):
         self.interface._value_changed()
 

@@ -4,25 +4,16 @@ from ..libs import QPushButton, QObject, Slot
 from .base import Widget
 
 
-# Let's not risk inheriting button from QObject...
-class PushListener(QObject):
-    def __init__(self, impl):
-        self.impl = impl
-        self.interface = impl.interface
-        impl.native.clicked.connect(self.clicked)
-    
-    @Slot()
-    def clicked(self):
-        self.interface.on_press()
-
-
 class Button(Widget):
     def create(self):
         self.native = QPushButton()
         
-        self.pushlistener = PushListener(self)
+        self.native.clicked.connect(self.clicked)
 
         self._icon = None
+
+    def clicked(self):
+        self.interface.on_press()
 
     def get_text(self):
         return str(self.native.text())
