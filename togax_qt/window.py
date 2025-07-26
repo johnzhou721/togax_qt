@@ -19,9 +19,6 @@ class Window:
         
         self.native.resizeEvent = self.resizeEvent
     
-    def create_container(self):
-        pass  # no container impl
-    
     def create(self):
         self.container = Container()
         self.native = self.container.native
