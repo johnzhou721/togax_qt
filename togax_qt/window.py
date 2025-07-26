@@ -11,8 +11,6 @@ class Window:
         self.interface._impl = self
 
         self.create()
-        self.container = Container()
-        self.native.setCentralWidget(self.container.native)
 
         self.native.setWindowTitle(title)
         self.native.resize(size[0], size[1])
@@ -25,7 +23,8 @@ class Window:
         pass  # no container impl
     
     def create(self):
-        self.native = QMainWindow()
+        self.container = Container()
+        self.native = self.container.native
 
     def show(self):
         self.native.show()
@@ -89,6 +88,10 @@ class Window:
 
 
 class MainWindow(Window):
+    def create(self):
+        self.native = QMainWindow()
+        self.container = Container()
+        self.native.setCentralWidget(self.container.native)
     def create_menus(self):
         pass
     def create_toolbar(self):

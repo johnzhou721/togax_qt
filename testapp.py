@@ -27,8 +27,10 @@ def build(app):
     button = toga.Button("Calculate", on_press=calculate)
     
     def showwindow(widget):
+        def handler(widget):
+            print("hello!1")
         wind = toga.Window(title="Toga", position=(800, 200), size=(300, 250))
-        but = toga.Button("Hello!")
+        but = toga.Button("Hello!", on_press=handler)
         wind.content = but
         wind.show()
     
