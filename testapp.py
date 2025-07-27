@@ -30,6 +30,7 @@ class MyApp(toga.App):
         def showwindow(widget):
             def handler(widget):
                 print("hello!1")
+                print(self.current_window)
 
             wind = toga.Window(title="Toga", position=(800, 200), size=(300, 250))
             but = toga.Button("Hello!", on_press=handler)
@@ -66,9 +67,9 @@ class MyApp(toga.App):
         self.main_window.content = box
         self.main_window.show()
 
-
     def preferences(self):
         print("Preferences!")
+        print(self.current_window)
 
 
 def main():

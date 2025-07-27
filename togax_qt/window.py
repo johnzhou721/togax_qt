@@ -13,6 +13,8 @@ class Window:
 
         self.create()
 
+        self.native.interface = interface
+
         self.native.setWindowTitle(title)
         self.native.resize(size[0], size[1])
         if position is not None:
