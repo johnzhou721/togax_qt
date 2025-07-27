@@ -105,9 +105,6 @@ class App:
                         f"<p><a href='{self.interface.home_page}'>{self.interface.home_page}</a></p>")
         about_box.setStandardButtons(QMessageBox.Close)
 
-        def open_link(link):
-            QDesktopServices.openUrl(QUrl(link))
-
         about_box.exec()
 
     ######################################################################
