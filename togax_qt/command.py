@@ -5,17 +5,19 @@ Also how am I supposed to put all the icons??? Will they display
 on macOS??? Anyone more familiar with KDE?
 """
 
+# TODO: Icon in the menu item "Preferences" based on app icon
+# but Icon isn't impl'd right now.
+
 import sys
 
 from toga import Command as StandardCommand, Group, Key
 
 from .keys import toga_to_qt_key
 
-from .libs import QAction
+from .libs import QAction, QIcon
 
-# Is the order even correct??? Why doesn't GTK pre-provide
-# menu bars???
-# Will this monkeypatch even work? (hack hack hack)
+# Is the order even correct??? Also, Why doesn't Qt pre-provide
+# menu bars in the first place???
 Group.SETTINGS = Group("Settings", order=80)
 
 
@@ -97,11 +99,12 @@ class Command:
             }
         # ---- Help menu -----------------------------------
         elif id == StandardCommand.VISIT_HOMEPAGE:
-            return {
-                "text": "Visit homepage",
-                "enabled": app.home_page is not None,
-                "group": Group.HELP,
-            }
+            return None  # TODO: Code this into the About menu.
+            #return {
+            #    "text": "Visit homepage",
+            #    "enabled": app.home_page is not None,
+            #    "group": Group.HELP,
+            #}
         elif id == StandardCommand.ABOUT:
             return {
                 "text": f"About {app.formal_name}",
@@ -121,6 +124,8 @@ class Command:
 
     def create_menu_item(self):
         item = QAction(self.interface.text)
+        if self.interface.text == "Quit":
+            item.setIcon(QIcon.fromTheme("application-exit"))
         item.triggered.connect(self.qt_click)
 
         # Transition from here below

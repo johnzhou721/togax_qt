@@ -8,6 +8,7 @@ from PySide6.QtCore import (
     QIODevice,  # noqa: F401
     Slot,  # noqa: F401
     QEvent,  # noqa: F401
+    QUrl,  # noqa: F401
 )
 from PySide6.QtWidgets import (
     QApplication,  # noqa: F401
@@ -18,6 +19,7 @@ from PySide6.QtWidgets import (
     QLabel,  # noqa: F401
     QLineEdit,  # noqa: F401
     QMenu,  # noqa: F401
+    QMessageBox,  # noqa: F401
 )
-from PySide6.QtGui import QGuiApplication, QWindow, QScreen, QAction, QKeySequence  # noqa: F401
+from PySide6.QtGui import QGuiApplication, QWindow, QScreen, QAction, QKeySequence, QIcon, QDesktopServices  # noqa: F401
 from qasync import QEventLoop  # noqa: F401

@@ -1,4 +1,4 @@
-from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer
+from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer, QDesktopServices, QUrl, QMessageBox
 import asyncio
 from .screens import Screen as ScreenImpl
 
@@ -96,12 +96,19 @@ class App:
     def beep(self):
         QApplication.beep()
 
-    # not implemented
-    def _close_about(self, dialog, *args, **kwargs):
-        pass
-
+    # TODO: Add Icon, make tabs, version
     def show_about_dialog(self):
-        pass
+        about_box = QMessageBox()
+        about_box.setWindowTitle(f"About {self.interface.formal_name}")
+        about_box.setTextFormat(Qt.RichText)
+        about_box.setText(f"<h3>{self.interface.formal_name}</h3>"
+                        f"<p><a href='{self.interface.home_page}'>{self.interface.home_page}</a></p>")
+        about_box.setStandardButtons(QMessageBox.Close)
+
+        def open_link(link):
+            QDesktopServices.openUrl(QUrl(link))
+
+        about_box.exec()
 
     ######################################################################
     # Cursor control
