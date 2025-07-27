@@ -39,7 +39,8 @@ class Command:
         if id == StandardCommand.PREFERENCES:
             # TODO: What is supposed to be the native location of this?
             return {
-                "text": "Configure" + app.formal_name,
+                "text": "Configure " + app.formal_name,
+                "shortcut": Key.MOD_1 + Key.SHIFT + ",",
                 "group": Group.SETTINGS,
                 "section": sys.maxsize - 1,
             }
