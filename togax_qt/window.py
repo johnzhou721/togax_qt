@@ -103,9 +103,6 @@ class MainWindow(Window):
         return submenu
 
     def create_menus(self):
-        # Creates and returns an empty one if does not exist
-        # out of the box, can't hurt to clear contents again
-        # below even if this happens
         menubar = self.native.menuBar()
         menubar.clear()
 

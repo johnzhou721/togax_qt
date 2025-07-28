@@ -1,12 +1,25 @@
-from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer, QDesktopServices, QUrl, QMessageBox
+from .libs import (
+    Qt,
+    QApplication,
+    QGuiApplication,
+    QEventLoop,
+    QObject,
+    Signal,
+    QTimer,
+    QMessageBox,
+)
 import asyncio
 from .screens import Screen as ScreenImpl
 from toga.command import Command, Group
 import toga
+from .togax import NativeIcon
+from .libs import QIcon
+
 
 def operate_on_focus(method_name, interface):
     fw = QApplication.focusWidget()
-    if not fw: return
+    if not fw:
+        return
     # call the method if it exists
     fn = getattr(fw, method_name, None)
     if callable(fn):
@@ -27,6 +40,9 @@ class AppSignalsListener(QObject):
         self.interface._startup()
 
 
+appsingle = QApplication()
+
+
 class App:
     # GTK apps exit when the last window is closed
     CLOSE_ON_LAST_WINDOW = True
@@ -37,7 +53,7 @@ class App:
         self.interface = interface
         self.interface._impl = self
 
-        self.native = QApplication()
+        self.native = appsingle
         self.loop = QEventLoop(self.native)
         asyncio.set_event_loop(self.loop)
         self.app_close_event = asyncio.Event()
@@ -52,6 +68,12 @@ class App:
     ######################################################################
 
     def create_standard_commands(self):
+        # This is sorta weird.  On KDE, default bundled apps have these stuff
+        # and they automatically enable / disable based on if this functionality
+        # is available... there's not a satisfying way to implement that in Qt
+        # though... see https://stackoverflow.com/questions/2047456, so we omit
+        # the enabled detection for now.  Most people just use Ctrl + Z etc.
+        # anyways...
         self.interface.commands.add(
             Command(
                 lambda interface: operate_on_focus("undo", interface),
@@ -59,6 +81,7 @@ class App:
                 shortcut=toga.Key.MOD_1 + "z",
                 group=Group.EDIT,
                 order=10,
+                icon=NativeIcon(QIcon.fromTheme("edit-undo")),
             ),
             Command(
                 lambda interface: operate_on_focus("redo", interface),
@@ -66,14 +89,16 @@ class App:
                 shortcut=toga.Key.SHIFT + toga.Key.MOD_1 + "z",
                 group=Group.EDIT,
                 order=20,
+                icon=NativeIcon(QIcon.fromTheme("edit-redo")),
             ),
             Command(
-                lambda: operate_on_focus("cut", interface),
+                lambda interface: operate_on_focus("cut", interface),
                 "Cut",
                 shortcut=toga.Key.MOD_1 + "x",
                 group=Group.EDIT,
                 section=10,
                 order=10,
+                icon=NativeIcon(QIcon.fromTheme("edit-cut")),
             ),
             Command(
                 lambda interface: operate_on_focus("copy", interface),
@@ -82,6 +107,7 @@ class App:
                 group=Group.EDIT,
                 section=10,
                 order=20,
+                icon=NativeIcon(QIcon.fromTheme("edit-copy")),
             ),
             Command(
                 lambda interface: operate_on_focus("paste", interface),
@@ -90,6 +116,7 @@ class App:
                 group=Group.EDIT,
                 section=10,
                 order=30,
+                icon=NativeIcon(QIcon.fromTheme("edit-paste")),
             ),
         )
 
@@ -109,9 +136,16 @@ class App:
     def main_loop(self):
         self.loop.run_until_complete(self.app_close_event.wait())
 
-    # Not implemented yet
     def set_icon(self, icon):
         self.interface.factory.not_implemented("App.set_icon()")
+        # TODO: Somehow this impl below does not work.
+        # for window in QApplication.topLevelWidgets():
+        #     window.windowHandle().setIcon(
+        #         icon._impl.native(
+        #             self.native.style().pixelMetric(QStyle.PM_SmallIconSize)
+        #             * self.native.primaryScreen().devicePixelRatio()
+        #         )
+        #     )
 
     # Not implemented yet
     def set_main_window(self, window):
@@ -150,8 +184,10 @@ class App:
         about_box = QMessageBox()
         about_box.setWindowTitle(f"About {self.interface.formal_name}")
         about_box.setTextFormat(Qt.RichText)
-        about_box.setText(f"<h3>{self.interface.formal_name}</h3>"
-                        f"<p><a href='{self.interface.home_page}'>{self.interface.home_page}</a></p>")
+        about_box.setText(
+            f"<h3>{self.interface.formal_name}</h3>"
+            f"<p><a href='{self.interface.home_page}'>{self.interface.home_page}</a></p>"
+        )
         about_box.setStandardButtons(QMessageBox.Close)
 
         about_box.exec()

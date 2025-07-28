@@ -10,15 +10,14 @@ on macOS??? Anyone more familiar with KDE?
 
 import sys
 
-from toga import Command as StandardCommand, Group, Key
+from toga import Command as StandardCommand, Group, Key, Icon
 
 from .keys import toga_to_qt_key
 
-from .libs import QAction, QIcon
+from .libs import QAction, QIcon, QApplication, QStyle
 
-# Is the order even correct??? Also, Why doesn't Qt pre-provide
-# menu bars in the first place???
-Group.SETTINGS = Group("Settings", order=80)
+
+from .togax import NativeIcon  # also patches to add Group.SETTINGS
 
 
 class Command:
@@ -37,14 +36,14 @@ class Command:
     # ubuntu backup...
     @classmethod
     def standard(self, app, id):
-        # ---- File menu ("abused" for app stuff) ----------
+        # ---- File menu ----------
         if id == StandardCommand.PREFERENCES:
-            # TODO: What is supposed to be the native location of this?
             return {
                 "text": "Configure " + app.formal_name,
                 "shortcut": Key.MOD_1 + Key.SHIFT + ",",
                 "group": Group.SETTINGS,
                 "section": sys.maxsize - 1,
+                "icon": Icon.APP_ICON,
             }
         elif id == StandardCommand.EXIT:
             # File > Quit??
@@ -53,6 +52,7 @@ class Command:
                 "shortcut": Key.MOD_1 + "q",
                 "group": Group.FILE,
                 "section": sys.maxsize,
+                "icon": NativeIcon(QIcon.fromTheme("application-exit")),
             }
 
         # ---- File menu -----------------------------------
@@ -99,17 +99,18 @@ class Command:
             }
         # ---- Help menu -----------------------------------
         elif id == StandardCommand.VISIT_HOMEPAGE:
-            return None  # TODO: Code this into the About menu.
-            #return {
+            return None  # Code this info into the About menu.
+            # return {
             #    "text": "Visit homepage",
             #    "enabled": app.home_page is not None,
             #    "group": Group.HELP,
-            #}
+            # }
         elif id == StandardCommand.ABOUT:
             return {
                 "text": f"About {app.formal_name}",
                 "group": Group.HELP,
                 "section": sys.maxsize,
+                "icon": Icon.APP_ICON,
             }
 
         raise ValueError(f"Unknown standard command {id!r}")
@@ -124,8 +125,15 @@ class Command:
 
     def create_menu_item(self):
         item = QAction(self.interface.text)
-        if self.interface.text == "Quit":
-            item.setIcon(QIcon.fromTheme("application-exit"))
+
+        if self.interface.icon:
+            item.setIcon(
+                self.interface.icon._impl.native(
+                    QApplication.style().pixelMetric(QStyle.PM_SmallIconSize)
+                    * QApplication.instance().primaryScreen().devicePixelRatio()
+                )
+            )
+
         item.triggered.connect(self.qt_click)
 
         if self.interface.shortcut is not None:

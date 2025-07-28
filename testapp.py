@@ -8,6 +8,7 @@ from toga.style.pack import COLUMN, LEFT, RIGHT, ROW, Pack
 
 class MyApp(toga.App):
     def startup(self):
+        self.icon = toga.Icon("icon.png")
         c_box = toga.Box()
         f_box = toga.Box()
         box = toga.Box()

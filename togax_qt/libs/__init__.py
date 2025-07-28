@@ -20,6 +20,16 @@ from PySide6.QtWidgets import (
     QLineEdit,  # noqa: F401
     QMenu,  # noqa: F401
     QMessageBox,  # noqa: F401
+    QStyle,  # noqa: F401
 )
-from PySide6.QtGui import QGuiApplication, QWindow, QScreen, QAction, QKeySequence, QIcon, QDesktopServices  # noqa: F401
+from PySide6.QtGui import (
+    QGuiApplication,  # noqa: F401
+    QWindow,  # noqa: F401
+    QScreen,  # noqa: F401
+    QAction,  # noqa: F401
+    QKeySequence,  # noqa: F401
+    QIcon,  # noqa: F401
+    QDesktopServices,  # noqa: F401
+    QPixmap,  # noqa: F401
+)
 from qasync import QEventLoop  # noqa: F401
