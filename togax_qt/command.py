@@ -128,8 +128,6 @@ class Command:
             item.setIcon(QIcon.fromTheme("application-exit"))
         item.triggered.connect(self.qt_click)
 
-        # Transition from here below
-
         if self.interface.shortcut is not None:
             # try:
             item.setShortcut(toga_to_qt_key(self.interface.shortcut))

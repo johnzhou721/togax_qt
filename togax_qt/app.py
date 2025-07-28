@@ -1,6 +1,16 @@
 from .libs import Qt, QApplication, QGuiApplication, QEventLoop, QObject, Signal, QTimer, QDesktopServices, QUrl, QMessageBox
 import asyncio
 from .screens import Screen as ScreenImpl
+from toga.command import Command, Group
+import toga
+
+def operate_on_focus(method_name, interface):
+    fw = QApplication.focusWidget()
+    if not fw: return
+    # call the method if it exists
+    fn = getattr(fw, method_name, None)
+    if callable(fn):
+        fn()
 
 
 class AppSignalsListener(QObject):
@@ -38,11 +48,50 @@ class App:
 
     ######################################################################
     # Commands and menus
-    # Not impl'd yet
+    # Impl incomplete.  See GitHub thread.
     ######################################################################
 
     def create_standard_commands(self):
-        pass
+        self.interface.commands.add(
+            Command(
+                lambda interface: operate_on_focus("undo", interface),
+                "Undo",
+                shortcut=toga.Key.MOD_1 + "z",
+                group=Group.EDIT,
+                order=10,
+            ),
+            Command(
+                lambda interface: operate_on_focus("redo", interface),
+                "Redo",
+                shortcut=toga.Key.SHIFT + toga.Key.MOD_1 + "z",
+                group=Group.EDIT,
+                order=20,
+            ),
+            Command(
+                lambda: operate_on_focus("cut", interface),
+                "Cut",
+                shortcut=toga.Key.MOD_1 + "x",
+                group=Group.EDIT,
+                section=10,
+                order=10,
+            ),
+            Command(
+                lambda interface: operate_on_focus("copy", interface),
+                "Copy",
+                shortcut=toga.Key.MOD_1 + "c",
+                group=Group.EDIT,
+                section=10,
+                order=20,
+            ),
+            Command(
+                lambda interface: operate_on_focus("paste", interface),
+                "Paste",
+                shortcut=toga.Key.MOD_1 + "v",
+                group=Group.EDIT,
+                section=10,
+                order=30,
+            ),
+        )
 
     def create_menus(self):
         for window in self.interface.windows:
@@ -119,7 +168,6 @@ class App:
 
     ######################################################################
     # Window control
-    # Not implemented
     ######################################################################
 
     def get_current_window(self):
