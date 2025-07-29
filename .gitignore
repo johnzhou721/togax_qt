@@ -5,6 +5,9 @@ __pycache__/
 # The output of my test program to test screenshot taking
 output.png
 
+# Testbed from upstream
+testbed
+
 # Upstream gitignore
 *.pyc
 *~

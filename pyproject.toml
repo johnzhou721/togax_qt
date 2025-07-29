@@ -21,8 +21,8 @@ maintainers = [
 ]
 dependencies = [
     "toga-core",
-    "qasync @ git+https://github.com/johnzhou721/qasync.git#egg=qasync",
-    "pep508",
+    "qasync",
+    "PySide6",
 ]
 keywords = [
     "gui",
@@ -71,3 +71,7 @@ source = [
     "src/togax_qt",
     "**/togax_qt",
 ]
+
+
+[tool.setuptools]
+packages = ["togax_qt"]

@@ -1,0 +1,26 @@
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -37,8 +37,8 @@
+     "tests",
+ ]
+ requires = [
+-    "../travertino",
+-    "../core",
++    "travertino",
++    "toga-core",
+ ]
+
+ # Some CI configurations (e.g., Textual) manually override `requires` to specify
+@@ -67,10 +67,10 @@
+
+ [tool.briefcase.app.testbed.linux]
+ test_sources = [
+-    "../gtk/tests_backend",
++    "../tests_backend",
+ ]
+ requires = [
+-    "../gtk",
++    "..",
+ ]
+
+ [tool.briefcase.app.testbed.windows]

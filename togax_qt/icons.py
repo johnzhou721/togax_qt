@@ -14,7 +14,7 @@ class Icon:
         self.interface = interface
         self._native = {}
 
-        if path is None:
+        if not path:
             # Use the executable location to find the share folder; look for icons
             # matching the app bundle in that location.
             hicolor = Path(sys.executable).parent.parent / "share/icons/hicolor"
