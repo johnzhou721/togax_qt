@@ -3,5 +3,5 @@ import pytest
 
 
 class LocationProbe:
-    pytest.skip("LocationProbe not impl'd yet on Qt", allow_module_level=True)
+    pytest.skip("Location not impl'd yet on Qt", allow_module_level=True)
     pass
