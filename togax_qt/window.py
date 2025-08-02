@@ -1,4 +1,4 @@
-from .libs import QMainWindow, QMenu
+from .libs import QMainWindow, QMenu, QStyle
 from toga.constants import WindowState
 from toga.types import Position, Size
 from toga.command import Separator
@@ -61,9 +61,14 @@ class Window:
         self.native.move(position[0], position[1])
 
     def set_app(self, app):
-        # you don't set the app a window belongs to, all windows
-        # instantiated belongs to your only QApplication
-        pass
+        # All windows instantiated belongs to your only QApplication
+        # but we need to set the icon
+        self.native.setWindowIcon(
+            app.interface.icon._impl.native(
+                app.native.style().pixelMetric(QStyle.PM_SmallIconSize)
+                * app.native.primaryScreen().devicePixelRatio()
+            )
+        )
 
     def get_visible(self):
         return self.native.isVisible()

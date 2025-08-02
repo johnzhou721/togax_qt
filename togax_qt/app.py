@@ -7,6 +7,7 @@ from .libs import (
     Signal,
     QTimer,
     QMessageBox,
+    QStyle,
 )
 import asyncio
 from .screens import Screen as ScreenImpl
@@ -137,15 +138,14 @@ class App:
         self.loop.run_until_complete(self.app_close_event.wait())
 
     def set_icon(self, icon):
-        self.interface.factory.not_implemented("App.set_icon()")
-        # TODO: Somehow this impl below does not work.
-        # for window in QApplication.topLevelWidgets():
-        #     window.windowHandle().setIcon(
-        #         icon._impl.native(
-        #             self.native.style().pixelMetric(QStyle.PM_SmallIconSize)
-        #             * self.native.primaryScreen().devicePixelRatio()
-        #         )
-        #     )
+        # TODO: Will this work?
+        for window in QApplication.topLevelWidgets():
+            window.setWindowIcon(
+                icon._impl.native(
+                    self.native.style().pixelMetric(QStyle.PM_SmallIconSize)
+                    * self.native.primaryScreen().devicePixelRatio()
+                )
+            )
 
     # Not implemented yet
     def set_main_window(self, window):
