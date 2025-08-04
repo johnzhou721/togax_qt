@@ -28,7 +28,9 @@ class Screen:
         )
 
     def get_origin(self) -> Position:
-        return self.native.geometry().topLeft()
+        return Position(
+            self.native.geometry().topLeft().x(), self.native.geometry().topLeft().y()
+        )
 
     def get_size(self) -> Size:
         geometry = self.native.geometry()

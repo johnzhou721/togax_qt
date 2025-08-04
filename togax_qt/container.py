@@ -34,7 +34,6 @@ class Container:
         if self._content:
             self._content.container = None
             self._content.native.setParent(None)
-            self._content.native.deleteLater()
 
         self._content = widget
 

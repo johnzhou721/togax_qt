@@ -27,7 +27,7 @@ QT_KEYS = {
     Key.QUOTE.value: Qt.Key_QuoteDbl,  # why shifted form?
     Key.COMMA.value: Qt.Key_Comma,
     Key.FULL_STOP.value: Qt.Key_Period,
-    Key.SLASH.value: Qt.Key_Slash,  # Key uses the shifted form
+    Key.SLASH.value: Qt.Key_Slash,
     Key.SPACE.value: Qt.Key_Space,
     Key.PAGE_UP.value: Qt.Key_PageUp,
     Key.PAGE_DOWN.value: Qt.Key_PageDown,
@@ -116,34 +116,14 @@ def toga_to_qt_key(key):
 
 
 def qt_to_toga_key(code):
-    pass  # No impl
+    modifiers = set()
+    for mod_key, qt_mod in QT_MODIFIERS.items():
+        if code & qt_mod:
+            modifiers.add(mod_key)
+            code &= ~qt_mod
 
+    qt_key_code = code
+    qt_to_toga = {v: k for k, v in QT_KEYS.items()}
+    toga_value = qt_to_toga.get(qt_key_code)
 
-#    modifiers = set()
-#
-#    code_names = str(code).split(", ")
-#    for toga_mod, code in WINFORMS_MODIFIERS.items():
-#        try:
-#            code_names.remove(str(code))
-#        except ValueError:
-#            pass
-#        else:
-#            modifiers.add(toga_mod)
-#
-#    assert len(code_names) == 1
-#    for value, code in WINFORMS_KEYS.items():
-#        if str(code) == code_names[0]:
-#            toga_value = value
-#            break
-#    else:
-#        toga_value = code_names[0].lower()
-#        if len(toga_value) > 1:
-#            toga_value = f"<{toga_value}>"
-#
-#    if (Key.SHIFT in modifiers) and (toga_value not in ascii_lowercase):
-#        for symbol, number in SHIFTED_KEYS.items():
-#            if number == toga_value:
-#                toga_value = symbol
-#                modifiers.remove(Key.SHIFT)
-#
-#    return {"key": Key(toga_value), "modifiers": modifiers}
+    return {"key": Key(toga_value), "modifiers": modifiers}

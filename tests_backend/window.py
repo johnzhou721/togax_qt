@@ -1,10 +1,11 @@
 import asyncio
 import pytest
 
-from togax_qt.libs import QMainWindow
+from togax_qt.libs import QMainWindow, Qt
+from .probe import BaseProbe
 
 
-class WindowProbe:
+class WindowProbe(BaseProbe):
     supports_closable = True
     supports_as_image = False  # not impld yet
     supports_focus = True
@@ -31,7 +32,6 @@ class WindowProbe:
             while (loop.time() - start_time) < timeout:
                 try:
                     assert self.instantaneous_state == state
-                    assert self.window._impl._pending_state_transition is None
                     return
                 except AssertionError as e:
                     exception = e
@@ -53,25 +53,28 @@ class WindowProbe:
 
     @property
     def is_resizable(self):
-        return True  # currently not changing this
+        min_size = self.native.minimumSize()
+        max_size = self.native.maximumSize()
+        return not (min_size == max_size)
 
     @property
     def is_closable(self):
-        return True  # currently not changing this
+        flags = self.native.windowFlags()
+        return bool(flags & Qt.WindowCloseButtonHint)
 
     @property
     def is_minimized(self):
-        raise pytest.skip("window state no impl")
+        return self.native.isMinimized()
 
     def minimize(self):
-        raise pytest.skip("window state no impl")
+        self.native.showMinimized()
 
     def unminimize(self):
-        raise pytest.skip("window state no impl")
+        self.native.showNormal()
 
     @property
     def instantaneous_state(self):
-        raise pytest.skip("window state no impl")
+        return self.window._impl.get_window_state(in_progress_state=False)
 
     def has_toolbar(self):
         raise pytest.skip("toolbar no impl")

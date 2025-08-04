@@ -6,7 +6,6 @@ from .libs import (
     QObject,
     Signal,
     QTimer,
-    QMessageBox,
     QStyle,
 )
 import asyncio
@@ -138,7 +137,6 @@ class App:
         self.loop.run_until_complete(self.app_close_event.wait())
 
     def set_icon(self, icon):
-        # TODO: Will this work?
         for window in QApplication.topLevelWidgets():
             window.setWindowIcon(
                 icon._impl.native(
@@ -181,16 +179,8 @@ class App:
 
     # TODO: Add Icon, make tabs, version
     def show_about_dialog(self):
-        about_box = QMessageBox()
-        about_box.setWindowTitle(f"About {self.interface.formal_name}")
-        about_box.setTextFormat(Qt.RichText)
-        about_box.setText(
-            f"<h3>{self.interface.formal_name}</h3>"
-            f"<p><a href='{self.interface.home_page}'>{self.interface.home_page}</a></p>"
-        )
-        about_box.setStandardButtons(QMessageBox.Close)
-
-        about_box.exec()
+        print("NOT IMPLD: ABOUT DIALOG")
+        pass
 
     ######################################################################
     # Cursor control
@@ -210,4 +200,4 @@ class App:
         return self.native.activeWindow()
 
     def set_current_window(self, window):
-        self.native.setActiveWindow(window)
+        window._impl.native.activateWindow()

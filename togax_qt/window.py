@@ -1,4 +1,4 @@
-from .libs import QMainWindow, QMenu, QStyle
+from .libs import QMainWindow, QMenu, QStyle, Qt
 from toga.constants import WindowState
 from toga.types import Position, Size
 from toga.command import Separator
@@ -40,8 +40,8 @@ class Window:
 
     def get_size(self):
         return Size(
-            self.native.size().width,
-            self.native.size().height,
+            self.native.size().width(),
+            self.native.size().height(),
         )
 
     def set_size(self, size):
@@ -73,13 +73,57 @@ class Window:
     def get_visible(self):
         return self.native.isVisible()
 
-    # =============== STUBS FOR WINDOW STATES ================
+    # =============== WINDOW STATES ================
     def get_window_state(self, in_progress_state=False):
-        # Stub.
-        return WindowState.NORMAL
+        window_state = self.native.windowState()
+
+        if window_state & Qt.WindowFullScreen:
+            if self._in_presentation_mode:
+                return WindowState.PRESENTATION
+            else:
+                return WindowState.FULLSCREEN
+        elif window_state & Qt.WindowMaximized:
+            return WindowState.MAXIMIZED
+        elif window_state & Qt.WindowMinimized:
+            return WindowState.MINIMIZED
+        else:
+            return WindowState.NORMAL
 
     def set_window_state(self, state):
-        pass
+        # Exit app presentation mode if another window is in it
+        if any(
+            window.state == WindowState.PRESENTATION and window != self.interface
+            for window in self.interface.app.windows
+        ):
+            self.interface.app.exit_presentation_mode()
+
+        current_state = self.get_window_state()
+        if current_state == state:
+            return
+
+        elif current_state != WindowState.NORMAL:
+            if current_state == WindowState.PRESENTATION:
+                self.interface.screen = self._before_presentation_mode_screen
+                del self._before_presentation_mode_screen
+                self._in_presentation_mode = False
+            self.native.showNormal()
+
+            self.set_window_state(state)
+
+        else:
+            if state == WindowState.MAXIMIZED:
+                self.native.showMaximized()
+
+            elif state == WindowState.MINIMIZED:
+                self.native.showMinimized()
+
+            elif state == WindowState.FULLSCREEN:
+                self.native.showFullScreen()
+
+            elif state == WindowState.PRESENTATION:
+                self._before_presentation_mode_screen = self.interface.screen
+                self.native.showFullScreen()
+                self._in_presentation_mode = True
 
     # ============== STUB =============
 
