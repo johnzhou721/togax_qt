@@ -43,6 +43,9 @@ class Window:
         self.accept_close = True
         self.native.close()
 
+    def hide(self):
+        self.native.hide()
+
     def get_title(self):
         self.native.windowTitle()
 
@@ -66,7 +69,7 @@ class Window:
         return ScreenImpl(self.native.screen())
 
     def get_position(self) -> Position:
-        return Position(self.native.position().x(), self.native.position().y())
+        return Position(self.native.pos().x(), self.native.pos().y())
 
     def set_position(self, position):
         self.native.move(position[0], position[1])

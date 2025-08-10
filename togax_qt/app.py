@@ -6,6 +6,7 @@ from .libs import (
     QObject,
     Signal,
     QTimer,
+    QCursor,
 )
 import asyncio
 from .screens import Screen as ScreenImpl
@@ -58,8 +59,10 @@ class App:
         self.app_close_event = asyncio.Event()
         self.native.aboutToQuit.connect(self.app_close_event.set)
 
-        # no idea what to name this...
+        # no idea what to name this... or should i put this into the main class
         self.signalslistener = AppSignalsListener(self)
+
+        self.cursorhidden = False
 
     ######################################################################
     # Commands and menus
@@ -183,10 +186,14 @@ class App:
     ######################################################################
 
     def hide_cursor(self):
-        self.interface.factory.not_implemented("App.hide_cursor()")
+        if not self.cursorhidden:
+            self.cursorhidden = True
+            self.native.setOverrideCursor(QCursor(Qt.BlankCursor))
 
     def show_cursor(self):
-        self.interface.factory.not_implemented("App.show_cursor()")
+        if self.cursorhidden:
+            self.cursorhidden = False
+            self.native.restoreOverrideCursor()
 
     ######################################################################
     # Window control

@@ -31,5 +31,6 @@ from PySide6.QtGui import (
     QIcon,  # noqa: F401
     QDesktopServices,  # noqa: F401
     QPixmap,  # noqa: F401
+    QCursor,  # noqa: F401
 )
 from qasync import QEventLoop  # noqa: F401

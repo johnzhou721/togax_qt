@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QCursor
+from PySide6.QtCore import Qt
 
 from togax_qt.keys import toga_to_qt_key, qt_to_toga_key
 
@@ -43,10 +44,7 @@ class AppProbe(BaseProbe):
 
     @property
     def is_cursor_visible(self):
-        pos = QCursor.pos()
-        form = self.main_window._impl.native
-        widget_rect = form.geometry()
-        return widget_rect.contains(form.mapFromGlobal(pos))
+        return self.app._impl.native.overrideCursor() != QCursor(Qt.BlankCursor)
 
     def unhide(self):
         self.main_window._impl.native.show()
