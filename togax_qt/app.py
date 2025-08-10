@@ -6,7 +6,6 @@ from .libs import (
     QObject,
     Signal,
     QTimer,
-    QStyle,
 )
 import asyncio
 from .screens import Screen as ScreenImpl
@@ -138,12 +137,9 @@ class App:
 
     def set_icon(self, icon):
         for window in QApplication.topLevelWidgets():
-            window.setWindowIcon(
-                icon._impl.native(
-                    self.native.style().pixelMetric(QStyle.PM_SmallIconSize)
-                    * self.native.primaryScreen().devicePixelRatio()
-                )
-            )
+            window.setWindowIcon(icon._impl.native)
+        self.interface.commands[Command.ABOUT].icon = icon
+        self.interface.commands[Command.PREFERENCES].icon = icon
 
     # Not implemented yet
     def set_main_window(self, window):

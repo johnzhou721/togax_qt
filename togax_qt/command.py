@@ -10,14 +10,14 @@ on macOS??? Anyone more familiar with KDE?
 
 import sys
 
-from toga import Command as StandardCommand, Group, Key, Icon
+from toga import Command as StandardCommand, Group, Key
 
 from .keys import toga_to_qt_key
 
-from .libs import QAction, QIcon, QApplication, QStyle
+from .libs import QAction, QIcon
 
 
-from .togax import NativeIcon  # also patches to add Group.SETTINGS
+from .togax import NativeIcon  # also patches to add Group.SETTINGS. adds icon changing
 
 
 class Command:
@@ -30,10 +30,6 @@ class Command:
         self.interface = interface
         self.native = []
 
-    # Referenced https://www.youtube.com/watch?v=KAZY79W5yOI for
-    # the native locations.  Ran out of disk space to set up a
-    # KDE machine, because I'm too afraid to delete my nonworking
-    # ubuntu backup...
     @classmethod
     def standard(self, app, id):
         # ---- File menu ----------
@@ -43,7 +39,7 @@ class Command:
                 "shortcut": Key.MOD_1 + Key.SHIFT + ",",
                 "group": Group.SETTINGS,
                 "section": sys.maxsize - 1,
-                "icon": Icon.APP_ICON,
+                "icon": app.icon,
             }
         elif id == StandardCommand.EXIT:
             # File > Quit??
@@ -110,7 +106,7 @@ class Command:
                 "text": f"About {app.formal_name}",
                 "group": Group.HELP,
                 "section": sys.maxsize,
-                "icon": Icon.APP_ICON,
+                "icon": app.icon,
             }
 
         raise ValueError(f"Unknown standard command {id!r}")
@@ -127,12 +123,7 @@ class Command:
         item = QAction(self.interface.text)
 
         if self.interface.icon:
-            item.setIcon(
-                self.interface.icon._impl.native(
-                    QApplication.style().pixelMetric(QStyle.PM_SmallIconSize)
-                    * QApplication.instance().primaryScreen().devicePixelRatio()
-                )
-            )
+            item.setIcon(self.interface.icon._impl.native)
 
         item.triggered.connect(self.qt_click)
 
@@ -149,3 +140,7 @@ class Command:
         self.native.append(item)
 
         return item
+
+    def set_icon(self):
+        for item in self.native:
+            item.setIcon(self.interface.icon._impl.native)

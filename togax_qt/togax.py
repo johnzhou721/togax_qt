@@ -24,17 +24,14 @@ class NativeIcon:
 
 class NativeIconImpl:
     def __init__(self, native):
-        self._native = native
-
-    def native(self, size):
-        # Trust that native icons have the correct size.
-        return self._native
+        self.native = native
 
 
-# Make setter of command accept the hack.
+# Make setter of command accept the hack, and we also call
+# impl to change the icon
 
 
-def __icon(self, icon_or_name) -> None:
+def icon_setter(self, icon_or_name) -> None:
     # added second condition.
     if (
         isinstance(icon_or_name, Icon)
@@ -45,8 +42,16 @@ def __icon(self, icon_or_name) -> None:
     else:
         self._icon = Icon(icon_or_name)
 
+    try:
+        # Call impl to change icon
+        self._impl.set_icon()
+    except AttributeError:
+        # This is the first time where we init and setting
+        # icon is handled by impl.  Pass
+        pass
 
-Command.icon = Command.icon.setter(__icon)
+
+Command.icon = Command.icon.setter(icon_setter)
 
 
 ###########################################

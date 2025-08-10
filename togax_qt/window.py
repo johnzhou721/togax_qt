@@ -1,4 +1,4 @@
-from .libs import QMainWindow, QMenu, QStyle, Qt
+from .libs import QMainWindow, QMenu, Qt
 from toga.constants import WindowState
 from toga.types import Position, Size
 from toga.command import Separator
@@ -14,6 +14,9 @@ class Window:
         self.create()
 
         self.native.interface = interface
+        self.native.impl = self
+        self.native.closeEvent = self.my_close_event
+        self.accept_close = False
 
         self.native.setWindowTitle(title)
         self.native.resize(size[0], size[1])
@@ -21,6 +24,13 @@ class Window:
             self.native.move(position[0], position[1])
 
         self.native.resizeEvent = self.resizeEvent
+
+    def my_close_event(self, event):
+        if self.accept_close:
+            event.accept()
+        else:
+            self.interface.on_close()
+            event.ignore()
 
     def create(self):
         self.container = Container()
@@ -30,6 +40,7 @@ class Window:
         self.native.show()
 
     def close(self):
+        self.accept_close = True
         self.native.close()
 
     def get_title(self):
@@ -63,12 +74,7 @@ class Window:
     def set_app(self, app):
         # All windows instantiated belongs to your only QApplication
         # but we need to set the icon
-        self.native.setWindowIcon(
-            app.interface.icon._impl.native(
-                app.native.style().pixelMetric(QStyle.PM_SmallIconSize)
-                * app.native.primaryScreen().devicePixelRatio()
-            )
-        )
+        self.native.setWindowIcon(app.interface.icon._impl.native)
 
     def get_visible(self):
         return self.native.isVisible()

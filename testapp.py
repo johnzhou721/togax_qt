@@ -8,6 +8,7 @@ from toga.style.pack import COLUMN, LEFT, RIGHT, ROW, Pack
 
 class MyApp(toga.App):
     def startup(self):
+        self.icon = toga.Icon("star.jpg")
         c_box = toga.Box()
         f_box = toga.Box()
         box = toga.Box()
@@ -32,7 +33,7 @@ class MyApp(toga.App):
                 print("hello!1")
                 print(self.current_window)
 
-            wind = toga.Window(title="Toga", position=(800, 200), size=(300, 250))
+            wind = toga.MainWindow(title="Toga", position=(800, 200), size=(300, 250))
             but = toga.Button("Hello!", on_press=handler)
             wind.content = but
             wind.show()
