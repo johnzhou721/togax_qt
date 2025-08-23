@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QWidget
 class Container:
     def __init__(self, content=None, layout_native=None, on_refresh=None):
         self.native = QWidget()
+        self.native.hide()
         self.layout_native = self.native if layout_native is None else layout_native
         self._content = None
         self.on_refresh = on_refresh

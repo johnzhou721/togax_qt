@@ -12,6 +12,7 @@ class Widget:
         self.native = None
         self.create()
         self.native.hide()
+        self._hidden = True
 
     @property
     def container(self):
@@ -25,10 +26,12 @@ class Widget:
             # Existing container should be removed
             self.native.setParent(None)
             self._container = None
+            self.native.hide()
         elif container:
             # setting container
             self._container = container
             self.native.setParent(container.native)
+            self.set_hidden(self._hidden)
 
         for child in self.interface.children:
             child._impl.container = container
@@ -76,7 +79,9 @@ class Widget:
         pass
 
     def set_hidden(self, hidden):
-        self.native.setHidden(hidden)
+        if self.container is not None:
+            self.native.setHidden(hidden)
+        self._hidden = hidden
 
     def set_color(self, color):
         # Not implemented yet

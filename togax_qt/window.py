@@ -38,6 +38,7 @@ class Window:
     def create(self):
         self.container = Container()
         self.native = self.container.native
+        self.container.native.show()
 
     def show(self):
         self.native.showNormal()
@@ -150,6 +151,7 @@ class MainWindow(Window):
     def create(self):
         self.native = QMainWindow()
         self.container = Container()
+        self.container.native.show()
         self.native.setCentralWidget(self.container.native)
 
     def _submenu(self, group, group_cache):

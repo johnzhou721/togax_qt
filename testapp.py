@@ -61,6 +61,7 @@ class MyApp(toga.App):
         button3 = toga.Button("Minimize", on_press=minmizewindow)
         button4 = toga.Button("READONLY Textfield", on_press=self.disable)
         button5 = toga.Button("DISABLE Textfield", on_press=self.disable1)
+        button6 = toga.Button("print ACTIVE WINDOW", on_press=self.activewindowprint)
 
         show = toga.Button("Show Window", on_press=showwindow)
 
@@ -79,6 +80,7 @@ class MyApp(toga.App):
         box.add(button3)
         box.add(button4)
         box.add(button5)
+        box.add(button6)
 
         box.style.update(direction=COLUMN, margin=10, gap=10)
         f_box.style.update(direction=ROW, gap=10)
@@ -117,6 +119,9 @@ class MyApp(toga.App):
 
     def disable1(self, widget):
         self.c_input.enabled = False
+
+    def activewindowprint(self, widget):
+        print(self.active_window)
 
 
 def main():
