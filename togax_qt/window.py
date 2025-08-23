@@ -42,6 +42,7 @@ class Window:
 
     def show(self):
         self.native.showNormal()
+        self.native.activateWindow()
 
     def close(self):
         self.accept_close = True
@@ -51,7 +52,7 @@ class Window:
         self.native.hide()
 
     def get_title(self):
-        self.native.windowTitle()
+        return self.native.windowTitle()
 
     def set_title(self, title):
         self.native.setWindowTitle(title)

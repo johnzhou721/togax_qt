@@ -12,6 +12,7 @@ from .fonts import Font
 from .container import Container
 from .widgets.label import Label
 from .widgets.textinput import TextInput
+from . import dialogs
 
 __all__ = [
     "not_implemented",
@@ -30,6 +31,7 @@ __all__ = [
     "Box",
     "Label",
     "TextInput",
+    "dialogs",
 ]
 
 

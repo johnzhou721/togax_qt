@@ -4,6 +4,7 @@ import toga
 from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication
+from .dialogs import DialogsMixin
 
 SPECIAL_KEY_MAP = {
     " ": Qt.Key_Space,
@@ -22,7 +23,7 @@ MODIFIER_MAP = {
 }
 
 
-class BaseProbe:
+class BaseProbe(DialogsMixin):
     async def redraw(self, message=None, delay=0):
         for widget in QApplication.allWidgets():
             widget.repaint()  # repaint soon

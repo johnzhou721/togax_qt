@@ -14,6 +14,12 @@ async def my_task(self):
     await asyncio.sleep(2)
     print("Task finished")
     print("===", self.main_window._impl.get_window_state())
+    self.main_window.hide()
+    self.main_window.show()
+    print(self.current_window)
+    await asyncio.sleep(0.5)
+    print(self.current_window)
+    print(self.current_window.title)
 
 
 class MyApp(toga.App):
@@ -95,6 +101,7 @@ class MyApp(toga.App):
         button.style.update(margin_top=5)
 
         self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window.title = "Title"
         self.main_window.content = box
         self.main_window.show()
         self.main_window.state = toga.constants.WindowState.MINIMIZED
@@ -106,9 +113,13 @@ class MyApp(toga.App):
             shortcut=Key.SHIFT + Key.TAB,  # Shift + Tab
         )
         self.commands.add(backtab_command)
+        print(self.main_window.title)
 
-    def on_backtab(self, widget):
+    async def on_backtab(self, widget):
         print("backtab")
+        await self.current_window.dialog(
+            toga.InfoDialog("Hello", "This is an information dialog!")
+        )
 
     def preferences(self):
         print("Preferences!")
@@ -121,7 +132,7 @@ class MyApp(toga.App):
         self.c_input.enabled = False
 
     def activewindowprint(self, widget):
-        print(self.active_window)
+        print(self.current_window)
 
 
 def main():
