@@ -23,7 +23,8 @@ class MyApp(toga.App):
         f_box = toga.Box()
         box = toga.Box()
 
-        c_input = toga.TextInput(readonly=True)
+        self.c_input = toga.TextInput(readonly=False)
+        c_input = self.c_input
         f_input = toga.TextInput()
 
         c_label = toga.Label("Celsius", style=Pack(text_align=LEFT))
@@ -58,6 +59,8 @@ class MyApp(toga.App):
 
         button2 = toga.Button("Change Icon", on_press=changeicon)
         button3 = toga.Button("Minimize", on_press=minmizewindow)
+        button4 = toga.Button("READONLY Textfield", on_press=self.disable)
+        button5 = toga.Button("DISABLE Textfield", on_press=self.disable1)
 
         show = toga.Button("Show Window", on_press=showwindow)
 
@@ -74,6 +77,8 @@ class MyApp(toga.App):
         box.add(show)
         box.add(button2)
         box.add(button3)
+        box.add(button4)
+        box.add(button5)
 
         box.style.update(direction=COLUMN, margin=10, gap=10)
         f_box.style.update(direction=ROW, gap=10)
@@ -106,6 +111,12 @@ class MyApp(toga.App):
     def preferences(self):
         print("Preferences!")
         print(self.current_window)
+
+    def disable(self, widget):
+        self.c_input.readonly = True
+
+    def disable1(self, widget):
+        self.c_input.enabled = False
 
 
 def main():

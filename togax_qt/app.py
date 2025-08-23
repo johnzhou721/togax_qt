@@ -10,11 +10,14 @@ import toga
 from .togax import NativeIcon
 
 
-def operate_on_focus(method_name, interface):
+def operate_on_focus(method_name, interface, needwrite=False):
     fw = QApplication.focusWidget()
     if not fw:
         return
-    # call the method if it exists
+    if needwrite:
+        fnwrite = getattr(fw, "isReadOnly", None)
+        if callable(fnwrite) and fnwrite():
+            return
     fn = getattr(fw, method_name, None)
     if callable(fn):
         fn()
@@ -90,7 +93,7 @@ class App:
                 icon=NativeIcon(QIcon.fromTheme("edit-redo")),
             ),
             Command(
-                lambda interface: operate_on_focus("cut", interface),
+                lambda interface: operate_on_focus("cut", interface, True),
                 "Cut",
                 shortcut=toga.Key.MOD_1 + "x",
                 group=Group.EDIT,
@@ -108,7 +111,7 @@ class App:
                 icon=NativeIcon(QIcon.fromTheme("edit-copy")),
             ),
             Command(
-                lambda interface: operate_on_focus("paste", interface),
+                lambda interface: operate_on_focus("paste", interface, True),
                 "Paste",
                 shortcut=toga.Key.MOD_1 + "v",
                 group=Group.EDIT,
