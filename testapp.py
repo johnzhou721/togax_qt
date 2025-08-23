@@ -1,9 +1,19 @@
 import os
+import asyncio
+
+from toga.keys import Key
 
 os.environ["TOGA_BACKEND"] = "togax_qt"
 
 import toga
 from toga.style.pack import COLUMN, LEFT, RIGHT, ROW, Pack
+
+
+async def my_task(self):
+    print("Task started")
+    await asyncio.sleep(2)
+    print("Task finished")
+    print("===", self.main_window._impl.get_window_state())
 
 
 class MyApp(toga.App):
@@ -41,7 +51,13 @@ class MyApp(toga.App):
         def changeicon(widget):
             self.icon = toga.Icon("icon1.png")
 
+        def minmizewindow(widget):
+            print("Minimize", self.main_window)
+            self.main_window.state = toga.constants.WindowState.MINIMIZED
+            print("===", self.main_window._impl.get_window_state())
+
         button2 = toga.Button("Change Icon", on_press=changeicon)
+        button3 = toga.Button("Minimize", on_press=minmizewindow)
 
         show = toga.Button("Show Window", on_press=showwindow)
 
@@ -57,6 +73,7 @@ class MyApp(toga.App):
         box.add(button)
         box.add(show)
         box.add(button2)
+        box.add(button3)
 
         box.style.update(direction=COLUMN, margin=10, gap=10)
         f_box.style.update(direction=ROW, gap=10)
@@ -73,6 +90,18 @@ class MyApp(toga.App):
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = box
         self.main_window.show()
+        self.main_window.state = toga.constants.WindowState.MINIMIZED
+        asyncio.create_task(my_task(self))
+
+        backtab_command = toga.Command(
+            self.on_backtab,
+            "BackTab",
+            shortcut=Key.SHIFT + Key.TAB,  # Shift + Tab
+        )
+        self.commands.add(backtab_command)
+
+    def on_backtab(self, widget):
+        print("backtab")
 
     def preferences(self):
         print("Preferences!")

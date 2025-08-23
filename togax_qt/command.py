@@ -14,7 +14,7 @@ from toga import Command as StandardCommand, Group, Key
 
 from .keys import toga_to_qt_key
 
-from .libs import QAction, QIcon
+from PySide6.QtGui import QAction, QIcon
 
 
 from .togax import NativeIcon  # also patches to add Group.SETTINGS. adds icon changing

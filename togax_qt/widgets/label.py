@@ -1,7 +1,8 @@
 from travertino.size import at_least
 from travertino.constants import LEFT, CENTER, RIGHT
 
-from ..libs import QLabel, Qt
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QLabel
 from .base import Widget
 
 

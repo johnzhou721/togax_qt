@@ -1,7 +1,8 @@
 import re
 from string import ascii_lowercase
 
-from .libs import Qt, QKeySequence
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QKeySequence
 
 from toga.keys import Key
 
@@ -65,9 +66,7 @@ QT_KEYS.update(
 )
 
 SHIFTED_KEYS = dict(zip("!@#$%^&*()", "1234567890"))
-SHIFTED_KEYS.update(
-    {lower.upper(): lower for lower in ascii_lowercase},
-)
+SHIFTED_KEYS.update({lower.upper(): lower for lower in ascii_lowercase})
 SHIFTED_KEYS.update(
     {
         "~": "`",

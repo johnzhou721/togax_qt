@@ -1,7 +1,8 @@
 import asyncio
 import pytest
 
-from togax_qt.libs import QMainWindow, Qt
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QMainWindow
 from .probe import BaseProbe
 
 

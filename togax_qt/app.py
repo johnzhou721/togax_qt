@@ -1,19 +1,13 @@
-from .libs import (
-    Qt,
-    QApplication,
-    QGuiApplication,
-    QEventLoop,
-    QObject,
-    Signal,
-    QTimer,
-    QCursor,
-)
+from PySide6.QtCore import Qt, QObject, Signal, QTimer
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QGuiApplication, QIcon, QCursor
+from qasync import QEventLoop
+
 import asyncio
 from .screens import Screen as ScreenImpl
 from toga.command import Command, Group
 import toga
 from .togax import NativeIcon
-from .libs import QIcon
 
 
 def operate_on_focus(method_name, interface):
@@ -63,6 +57,8 @@ class App:
         self.signalslistener = AppSignalsListener(self)
 
         self.cursorhidden = False
+
+        self.native.setStyle("Breeze")
 
     ######################################################################
     # Commands and menus

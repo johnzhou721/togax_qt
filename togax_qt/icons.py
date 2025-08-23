@@ -3,7 +3,7 @@ from pathlib import Path
 
 import toga
 
-from .libs import QIcon
+from PySide6.QtGui import QIcon
 
 
 class Icon:

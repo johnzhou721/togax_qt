@@ -1,6 +1,6 @@
 from travertino.size import at_least
 
-from ..libs import QPushButton
+from PySide6.QtWidgets import QPushButton
 from .base import Widget
 
 

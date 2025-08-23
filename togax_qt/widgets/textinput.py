@@ -1,7 +1,8 @@
 from travertino.size import at_least
 from travertino.constants import LEFT, CENTER, RIGHT
 
-from ..libs import QEvent, QLineEdit, QObject, Qt
+from PySide6.QtCore import Qt, QObject, QEvent
+from PySide6.QtWidgets import QLineEdit
 from .base import Widget
 import warnings
 

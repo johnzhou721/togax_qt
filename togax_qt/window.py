@@ -1,4 +1,5 @@
-from .libs import QMainWindow, QMenu, Qt
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QMainWindow, QMenu
 from toga.constants import WindowState
 from toga.types import Position, Size
 from toga.command import Separator
@@ -17,6 +18,8 @@ class Window:
         self.native.impl = self
         self.native.closeEvent = self.my_close_event
         self.accept_close = False
+
+        self._in_presentation_mode = False
 
         self.native.setWindowTitle(title)
         self.native.resize(size[0], size[1])
@@ -37,7 +40,7 @@ class Window:
         self.native = self.container.native
 
     def show(self):
-        self.native.show()
+        self.native.showNormal()
 
     def close(self):
         self.accept_close = True

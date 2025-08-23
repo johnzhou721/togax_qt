@@ -1,4 +1,4 @@
-from .libs import QWidget
+from PySide6.QtWidgets import QWidget
 
 
 class Container:

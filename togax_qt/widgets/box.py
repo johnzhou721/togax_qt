@@ -1,5 +1,5 @@
 from .base import Widget
-from ..libs import QWidget
+from PySide6.QtWidgets import QWidget
 from travertino.size import at_least
 
 

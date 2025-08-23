@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 from travertino.size import at_least
 
-from ..libs import Qt
+from PySide6.QtCore import Qt
 
 
 class Widget:
