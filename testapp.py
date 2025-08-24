@@ -47,10 +47,15 @@ class MyApp(toga.App):
 
         def showwindow(widget):
             def handler(widget):
-                print("hello!1")
-                print(self.current_window)
+                self.current_window.close()
 
-            wind = toga.MainWindow(title="Toga", position=(800, 200), size=(300, 250))
+            wind = toga.MainWindow(
+                title="Toga",
+                position=(800, 200),
+                size=(300, 250),
+                resizable=False,
+                closable=False,
+            )
             but = toga.Button("Hello!", on_press=handler)
             wind.content = but
             wind.show()

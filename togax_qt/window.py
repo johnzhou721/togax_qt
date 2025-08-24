@@ -16,24 +16,27 @@ class Window:
 
         self.native.interface = interface
         self.native.impl = self
-        self.native.closeEvent = self.my_close_event
-        self.accept_close = False
+        self.native.closeEvent = self.qt_close_event
+        self.prog_close = False
 
         self._in_presentation_mode = False
 
         self.native.setWindowTitle(title)
         self.native.resize(size[0], size[1])
+        if not self.interface.resizable:
+            self.native.setFixedSize(size[0], size[1])
         if position is not None:
             self.native.move(position[0], position[1])
 
         self.native.resizeEvent = self.resizeEvent
 
-    def my_close_event(self, event):
-        if self.accept_close:
-            event.accept()
-        else:
-            self.interface.on_close()
+    def qt_close_event(self, event):
+        if not self.prog_close:
             event.ignore()
+            if self.interface.closable:
+                # Subtlety: If on_close approves the closing
+                # this handler doesn't get called again
+                self.interface.on_close()
 
     def create(self):
         self.container = Container()
@@ -45,7 +48,12 @@ class Window:
         self.native.activateWindow()
 
     def close(self):
-        self.accept_close = True
+        # OK, this is a bit of a stretch, since
+        # this could've been a user-induced close
+        # on_closed as well, however this flag
+        # is only used for qt_close_event and you
+        # can check out the subtlety there.
+        self.prog_close = True
         self.native.close()
 
     def hide(self):

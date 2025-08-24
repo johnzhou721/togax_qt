@@ -7,13 +7,15 @@ from .probe import BaseProbe
 
 
 class WindowProbe(BaseProbe):
-    supports_closable = True
+    # There *is* a close button hint but it doesn't seem to work
+    # under KDE so we take similar handling as winforms here.
+    supports_closable = False
     supports_as_image = False  # not impld yet
     supports_focus = True
     supports_minimizable = False  # not impld yet
     supports_move_while_hidden = False
-    supports_unminimize = False  # not impld yet
-    supports_minimize = False  # not impld yet
+    supports_unminimize = True
+    supports_minimize = True
     supports_placement = True
 
     def __init__(self, app, window):
