@@ -3,6 +3,8 @@ from toga.types import Position, Size
 
 from PySide6.QtCore import QByteArray, QBuffer, QIODevice
 
+from .libs import IS_WAYLAND
+
 
 class Screen:
     _instances = {}
@@ -37,9 +39,12 @@ class Screen:
         return Size(geometry.width(), geometry.height())
 
     def get_image_data(self):
-        grabbed = self.native.grabWindow(0)
-        byte_array = QByteArray()
-        buffer = QBuffer(byte_array)
-        buffer.open(QIODevice.WriteOnly)
-        grabbed.save(buffer, "PNG")
-        return byte_array.data()
+        if not IS_WAYLAND:
+            grabbed = self.native.grabWindow(0)
+            byte_array = QByteArray()
+            buffer = QBuffer(byte_array)
+            buffer.open(QIODevice.WriteOnly)
+            grabbed.save(buffer, "PNG")
+            return byte_array.data()
+        else:
+            self.interface.factory.not_implemented("Screen.get_image_data() on Wayland")
