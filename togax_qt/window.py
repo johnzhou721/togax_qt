@@ -83,8 +83,7 @@ class Window:
         self.container.native.show()
 
     def show(self):
-        self.native.showNormal()
-        self.native.activateWindow()
+        self.native.show()
         self.interface.on_show()
 
     def close(self):

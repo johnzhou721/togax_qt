@@ -26,7 +26,6 @@ MODIFIER_MAP = {
 class BaseProbe(DialogsMixin):
     async def redraw(self, message=None, delay=0):
         for widget in QApplication.allWidgets():
-            widget.update()
             widget.repaint()
 
         # Wait a second... (pun intended)
