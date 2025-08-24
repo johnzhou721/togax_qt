@@ -46,6 +46,7 @@ class Window:
     def show(self):
         self.native.showNormal()
         self.native.activateWindow()
+        self.interface.on_show()
 
     def close(self):
         # OK, this is a bit of a stretch, since
@@ -58,6 +59,7 @@ class Window:
 
     def hide(self):
         self.native.hide()
+        self.interface.on_hide()
 
     def get_title(self):
         return self.native.windowTitle()
@@ -129,6 +131,8 @@ class Window:
                 del self._before_presentation_mode_screen
                 self._in_presentation_mode = False
             self.native.showNormal()
+            if current_state == WindowState.MINIMIZED:
+                self.interface.on_show()
 
             self.set_window_state(state)
 
@@ -138,6 +142,7 @@ class Window:
 
             elif state == WindowState.MINIMIZED:
                 self.native.showMinimized()
+                self.interface.on_hide()
 
             elif state == WindowState.FULLSCREEN:
                 self.native.showFullScreen()
