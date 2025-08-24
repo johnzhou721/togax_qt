@@ -1,10 +1,49 @@
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QMenu
+from PySide6.QtCore import Qt, QEvent
+from PySide6.QtWidgets import QMainWindow, QMenu, QWidget, QVBoxLayout
 from toga.constants import WindowState
 from toga.types import Position, Size
 from toga.command import Separator
 from .screens import Screen as ScreenImpl
 from .container import Container
+
+
+def process_change(native, event):
+    if event.type() == QEvent.WindowStateChange:
+        old = event.oldState()
+        new = native.windowState()
+        if not old & Qt.WindowMinimized and new & Qt.WindowMinimized:
+            native.interface.on_hide()
+        elif old & Qt.WindowMinimized and not new & Qt.WindowMinimized:
+            native.interface.on_show()
+
+
+class TogaTLWidget(QWidget):
+    def __init__(self, impl, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.interface = impl.interface
+
+    def changeEvent(self, event):
+        process_change(self, event)
+        super().changeEvent(event)
+
+
+class TogaMainWindow(QMainWindow):
+    def __init__(self, impl, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.interface = impl.interface
+
+    def changeEvent(self, event):
+        process_change(self, event)
+        super().changeEvent(event)
+
+
+def wrap_container(widget, impl):
+    wrapper = TogaTLWidget(impl)
+    layout = QVBoxLayout(wrapper)
+    layout.setContentsMargins(0, 0, 0, 0)
+    layout.setSpacing(0)
+    layout.addWidget(widget)
+    return wrapper
 
 
 class Window:
@@ -40,7 +79,7 @@ class Window:
 
     def create(self):
         self.container = Container()
-        self.native = self.container.native
+        self.native = wrap_container(self.container.native, self)
         self.container.native.show()
 
     def show(self):
@@ -131,9 +170,6 @@ class Window:
                 del self._before_presentation_mode_screen
                 self._in_presentation_mode = False
             self.native.showNormal()
-            if current_state == WindowState.MINIMIZED:
-                self.interface.on_show()
-
             self.set_window_state(state)
 
         else:
@@ -142,7 +178,6 @@ class Window:
 
             elif state == WindowState.MINIMIZED:
                 self.native.showMinimized()
-                self.interface.on_hide()
 
             elif state == WindowState.FULLSCREEN:
                 self.native.showFullScreen()
@@ -163,7 +198,7 @@ class Window:
 
 class MainWindow(Window):
     def create(self):
-        self.native = QMainWindow()
+        self.native = TogaMainWindow(self)
         self.container = Container()
         self.container.native.show()
         self.native.setCentralWidget(self.container.native)
