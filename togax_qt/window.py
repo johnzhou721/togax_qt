@@ -120,16 +120,20 @@ class Window:
         if self.interface.content:
             self.interface.content.refresh()
 
+    def _extra_height(self):
+        return self.native.size().height() - self.container.native.size().height()
+
     def container_refreshed(self, container):
         min_width = self.interface.content.layout.min_width
         min_height = self.interface.content.layout.min_height
-        size = self.native.size()
+        size = self.container.native.size()
+        # Calling self.set_size here to trigger logic about fixed size windows.
         if size.width() < min_width and size.height() < min_height:
-            self.set_size((min_width, min_height))
+            self.set_size((min_width, min_height + self._extra_height()))
         elif size.width() < min_width:
-            self.set_size((min_width, size.height()))
+            self.set_size((min_width, size.height() + self._extra_height()))
         elif size.height() < min_height:
-            self.set_size((size.width(), size.height()))
+            self.set_size((size.width(), size.height() + self._extra_height()))
         self.container.native.setMinimumSize(min_width, min_height)
 
     def get_current_screen(self):
