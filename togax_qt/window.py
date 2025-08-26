@@ -50,6 +50,8 @@ class Window:
     def __init__(self, interface, title, position, size):
         self.interface = interface
         self.interface._impl = self
+        self.container = Container(on_refresh=self.container_refreshed)
+        self.container.native.show()
 
         self.create()
 
@@ -78,9 +80,7 @@ class Window:
                 self.interface.on_close()
 
     def create(self):
-        self.container = Container()
         self.native = wrap_container(self.container.native, self)
-        self.container.native.show()
 
     def show(self):
         self.native.show()
@@ -112,11 +112,25 @@ class Window:
         )
 
     def set_size(self, size):
+        if not self.interface.resizable:
+            self.native.setFixedSize(size[0], size[1])
         self.native.resize(size[0], size[1])
 
     def resizeEvent(self, event):
         if self.interface.content:
             self.interface.content.refresh()
+
+    def container_refreshed(self, container):
+        min_width = self.interface.content.layout.min_width
+        min_height = self.interface.content.layout.min_height
+        size = self.native.size()
+        if size.width() < min_width and size.height() < min_height:
+            self.set_size((min_width, min_height))
+        elif size.width() < min_width:
+            self.set_size((min_width, size.height()))
+        elif size.height() < min_height:
+            self.set_size((size.width(), size.height()))
+        self.container.native.setMinimumSize(min_width, min_height)
 
     def get_current_screen(self):
         return ScreenImpl(self.native.screen())
@@ -198,8 +212,6 @@ class Window:
 class MainWindow(Window):
     def create(self):
         self.native = TogaMainWindow(self)
-        self.container = Container()
-        self.container.native.show()
         self.native.setCentralWidget(self.container.native)
 
     def _submenu(self, group, group_cache):

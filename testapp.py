@@ -14,12 +14,12 @@ async def my_task(self):
     await asyncio.sleep(2)
     print("Task finished")
     print("===", self.main_window._impl.get_window_state())
-    self.main_window.hide()
-    self.main_window.show()
-    print(self.current_window)
-    await asyncio.sleep(0.5)
-    print(self.current_window)
-    print(self.current_window.title)
+    # self.main_window.hide()
+    # self.main_window.show()
+    # print(self.current_window)
+    # await asyncio.sleep(0.5)
+    # print(self.current_window)
+    # print(self.current_window.title)
 
 
 class MyApp(toga.App):
