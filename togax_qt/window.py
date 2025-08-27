@@ -71,6 +71,8 @@ class Window:
 
         self.native.resizeEvent = self.resizeEvent
 
+        self._hidden_window_state = None
+
     def qt_close_event(self, event):
         if not self.prog_close:
             event.ignore()
@@ -82,7 +84,25 @@ class Window:
     def create(self):
         self.native = wrap_container(self.container.native, self)
 
+    def hide(self):
+        # https://forum.qt.io/topic/163064/delayed-window-state-read-after-hide-gives-wrong-results-even-in-x11/
+        # Sorta unreliable window state when hidden here, pull our own logic.
+        if self._hidden_window_state is None:
+            self._hidden_window_state = self.native.windowState()
+
+        self.native.hide()
+        # Ideally we'd love to be able to use showEvent but AFAICT
+        # it also gets triggered on deminimization and sometimes even
+        # TWICE so it's unreliable.  Hack this around, no way to hide
+        # window through system in KDE AFAICT anyways.
+        self.interface.on_hide()
+
     def show(self):
+        # Do this bee-fore we show as the docs indicate it'd be applied on show
+        # and also to avoid brief flashing / failure to apply
+        if self._hidden_window_state is not None:
+            self.native.setWindowState(self._hidden_window_state)
+            self._hidden_window_state = None
         self.native.show()
         self.interface.on_show()
 
@@ -94,10 +114,6 @@ class Window:
         # can check out the subtlety there.
         self.prog_close = True
         self.native.close()
-
-    def hide(self):
-        self.native.hide()
-        self.interface.on_hide()
 
     def get_title(self):
         return self.native.windowTitle()
@@ -155,7 +171,7 @@ class Window:
 
     # =============== WINDOW STATES ================
     def get_window_state(self, in_progress_state=False):
-        window_state = self.native.windowState()
+        window_state = self._hidden_window_state or self.native.windowState()
 
         if window_state & Qt.WindowFullScreen:
             if self._in_presentation_mode:
