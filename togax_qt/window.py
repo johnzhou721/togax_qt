@@ -5,9 +5,10 @@ from toga.types import Position, Size
 from toga.command import Separator
 from .screens import Screen as ScreenImpl
 from .container import Container
+import os
 
 
-from .libs import AnyWithin, TESTING  # tests hackery...
+from .libs import AnyWithin  # tests hackery...
 
 
 def process_change(native, event):
@@ -143,6 +144,7 @@ class Window:
         self.native.setWindowTitle(title)
 
     def get_size(self):
+        TESTING = bool(os.environ.get("PYTEST_VERSION"))
         if TESTING:
             # Well, so sad this has to happen.  Ideally shouldn't be doing this in lib code.
             # Upstream glitch.  Try making a window, set its size, read it after a sec,
