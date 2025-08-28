@@ -24,17 +24,3 @@
  ]
 
  [tool.briefcase.app.testbed.windows]
---- a/tests/app/test_desktop.py
-+++ b/tests/app/test_desktop.py
-@@ -531,9 +531,11 @@
-             assert app.current_window == main_window
-
-         main_window.hide()
-+        await app_probe.redraw("Hiding window", delay=0.5)
-         assert app.current_window is None
-
-         main_window.show()
-+        await app_probe.redraw("Showing window", delay=0.5)
-         assert app.current_window == main_window
-     finally:
-         main_window.show()

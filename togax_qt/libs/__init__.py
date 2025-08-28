@@ -1,3 +1,2 @@
-from PySide6.QtGui import QGuiApplication
-
-IS_WAYLAND = "wayland" == QGuiApplication.platformName()
+from .env import *  # noqa
+from .testing import *  # noqa

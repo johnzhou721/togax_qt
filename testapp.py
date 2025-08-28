@@ -2,6 +2,7 @@ import os
 import asyncio
 
 from toga.keys import Key
+from PySide6.QtCore import Qt
 
 os.environ["TOGA_BACKEND"] = "togax_qt"
 
@@ -105,7 +106,8 @@ class MyApp(toga.App):
 
         button.style.update(margin_top=5)
 
-        self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window = toga.MainWindow(title=self.formal_name, minimizable=False)
+        print(self.main_window._impl.native.windowFlags() & Qt.WindowMinimizeButtonHint)
         self.main_window.title = "Title"
         self.main_window.content = box
         self.main_window.show()

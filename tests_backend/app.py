@@ -72,7 +72,7 @@ class AppProbe(BaseProbe):
         item.trigger()
 
     def activate_menu_hide(self):
-        pytest.skip("don't know what this does")
+        pytest.xfail("No hide in menu for KDE apps")
 
     def activate_menu_exit(self):
         self._activate_menu_item(["File", "Quit"])
@@ -108,13 +108,13 @@ class AppProbe(BaseProbe):
         self.assert_menu_item(["Help", "About Toga Testbed"])
 
     def activate_menu_close_window(self):
-        pytest.skip("not impld")
+        pytest.xfail("Menu close is not typical of Qt")
 
     def activate_menu_close_all_windows(self):
-        pytest.skip("not impld")
+        pytest.xfail("Menu close all windows is not typical of Qt")
 
     def activate_menu_minimize(self):
-        pytest.skip("Not impld")
+        pytest.xfail("Menu Minimize is not typical of Qt")
 
     def keystroke(self, combination):
         return qt_to_toga_key(toga_to_qt_key(combination))

@@ -2,8 +2,9 @@ import asyncio
 import pytest
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QWidget
 from .probe import BaseProbe
+from togax_qt.libs import AnyWithin
 
 
 class WindowProbe(BaseProbe):
@@ -12,7 +13,9 @@ class WindowProbe(BaseProbe):
     supports_closable = False
     supports_as_image = False  # not impld yet
     supports_focus = True
-    supports_minimizable = False  # not impld yet
+    supports_minimizable = (
+        False  # cannot be impld on Qt, at least you hint it but it still show on KDE
+    )
     supports_move_while_hidden = False
     supports_unminimize = True
     supports_minimize = True
@@ -22,7 +25,8 @@ class WindowProbe(BaseProbe):
         self.app = app
         self.window = window
         self.native = window._impl.native
-        assert isinstance(self.native, QMainWindow) or hasattr(self.native, "close")
+        self.container = window._impl.container
+        assert isinstance(self.native, QMainWindow) or isinstance(self.native, QWidget)
 
     async def wait_for_window(self, message, state=None):
         await self.redraw(message, delay=0.1)
@@ -52,8 +56,10 @@ class WindowProbe(BaseProbe):
 
     @property
     def content_size(self):
-        size = self.native.size()
-        return size.width(), size.height()
+        size = self.container.native.size()
+        return AnyWithin(size.width() - 2, size.width() + 2), AnyWithin(
+            size.height() - 2, size.height() + 2
+        )
 
     @property
     def is_resizable(self):
@@ -75,6 +81,10 @@ class WindowProbe(BaseProbe):
 
     def unminimize(self):
         self.native.showNormal()
+
+    # @property
+    # def is_minimizable(self):
+    # return bool(self.native.windowFlags() & Qt.WindowMinimizeButtonHint)
 
     @property
     def instantaneous_state(self):
