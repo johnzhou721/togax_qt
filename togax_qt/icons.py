@@ -5,6 +5,8 @@ import toga
 
 from PySide6.QtGui import QIcon
 
+IMPL_DICT = {}
+
 
 class Icon:
     EXTENSIONS = [".png", ".jpeg", ".jpg", ".gif", ".bmp"]
@@ -30,3 +32,5 @@ class Icon:
             self.native = QIcon(str(sizes[max(sizes)]))
         else:
             self.native = QIcon(str(path))
+
+        IMPL_DICT[self.native] = self

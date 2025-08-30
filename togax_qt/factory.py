@@ -1,5 +1,5 @@
 from toga import NotImplementedWarning
-
+from . import initialization  # noqa: F401
 from .app import App
 from .paths import Paths
 from .icons import Icon
@@ -12,7 +12,7 @@ from .fonts import Font
 from .container import Container
 from .widgets.label import Label
 from .widgets.textinput import TextInput
-from . import dialogs
+from . import dialogs  # noqa
 
 __all__ = [
     "not_implemented",

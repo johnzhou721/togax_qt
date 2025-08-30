@@ -24,7 +24,10 @@ class AppProbe(BaseProbe):
         super().__init__()
         self.app = app
         self.main_window = app.main_window
+        self.native = self.app._impl.native
         assert isinstance(QApplication.instance(), QApplication)
+        # and the clouds are moving on with every autumn...
+        assert self.native.style().objectName() == "breeze"
 
     @property
     def config_path(self):
@@ -44,7 +47,7 @@ class AppProbe(BaseProbe):
 
     @property
     def is_cursor_visible(self):
-        return self.app._impl.native.overrideCursor() != QCursor(Qt.BlankCursor)
+        return self.native.overrideCursor() != QCursor(Qt.BlankCursor)
 
     def unhide(self):
         self.main_window._impl.native.show()

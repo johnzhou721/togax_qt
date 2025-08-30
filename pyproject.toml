@@ -22,7 +22,6 @@ maintainers = [
 dependencies = [
     "toga-core",
     "qasync",
-    "PySide6",
 ]
 keywords = [
     "gui",

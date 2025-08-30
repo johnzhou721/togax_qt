@@ -241,6 +241,8 @@ class Window:
         elif current_state != WindowState.NORMAL:
             if current_state == WindowState.PRESENTATION:
                 self.interface.screen = self._before_presentation_mode_screen
+                if hasattr(self.native, "menuBar"):
+                    self.native.menuBar().show()
                 del self._before_presentation_mode_screen
                 self._in_presentation_mode = False
             self.native.showNormal()
@@ -259,6 +261,8 @@ class Window:
             elif state == WindowState.PRESENTATION:
                 self._before_presentation_mode_screen = self.interface.screen
                 self.native.showFullScreen()
+                if hasattr(self.native, "menuBar"):
+                    self.native.menuBar().hide()
                 self._in_presentation_mode = True
 
     # ============== STUB =============

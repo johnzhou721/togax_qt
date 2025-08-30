@@ -1,6 +1,7 @@
 from travertino.size import at_least
 
 from PySide6.QtWidgets import QPushButton
+from PySide6.QtGui import QIcon
 from .base import Widget
 
 
@@ -22,12 +23,15 @@ class Button(Widget):
         self.native.setText(text)
 
     def get_icon(self):
-        # Not impl'd yet
-        return None
+        return self._icon
 
     def set_icon(self, icon):
-        # Not impl'd yet
-        pass
+        if icon is not None:
+            self.native.setIcon(icon._impl.native)
+        else:
+            self.native.setIcon(QIcon())
+        # Somehow Qt copies into different memory address when I pass icon
+        self._icon = icon
 
     def rehint(self):
         width = self.native.sizeHint().width()
