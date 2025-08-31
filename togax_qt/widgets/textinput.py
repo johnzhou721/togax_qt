@@ -1,26 +1,18 @@
 from travertino.size import at_least
-from travertino.constants import LEFT, CENTER, RIGHT
+from travertino.constants import LEFT, CENTER, RIGHT, JUSTIFY
 
-from PySide6.QtCore import Qt, QObject, QEvent
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QLineEdit
 from .base import Widget
-import warnings
 
 
-# Note: This extra class is made because you MUST inherit
-# from QObject to use an event filter, however I'm extremely
-# afraid of any method name collisions that may happen if we
-# do it on the main TextInput...
-class TextInputListener(QObject):
-    def __init__(self, impl):
-        super().__init__()
+class TogaLineEdit(QLineEdit):
+    def __init__(self, impl, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.impl = impl
-        self.native = impl.native
         self.interface = impl.interface
-
-        self.native.textChanged.connect(self.qt_on_change)
-        self.native.returnPressed.connect(self.qt_on_confirm)
-        self.native.installEventFilter(self)
+        self.textChanged.connect(self.qt_on_change)
+        self.returnPressed.connect(self.qt_on_confirm)
 
     def qt_on_change(self):
         self.interface._value_changed()
@@ -28,19 +20,18 @@ class TextInputListener(QObject):
     def qt_on_confirm(self):
         self.interface.on_confirm()
 
-    def eventFilter(self, obj, event):
-        if obj == self.native:
-            if event.type() == QEvent.FocusIn:
-                self.interface.on_gain_focus()
-            elif event.type() == QEvent.FocusOut:
-                self.interface.on_lose_focus()
-        return False
+    def focusInEvent(self, event):
+        super().focusInEvent(event)
+        self.interface.on_gain_focus()
+
+    def focusOutEvent(self, event):
+        super().focusOutEvent(event)
+        self.interface.on_lose_focus()
 
 
 class TextInput(Widget):
     def create(self):
-        self.native = QLineEdit()
-        self.listener = TextInputListener(self)
+        self.native = TogaLineEdit(self)
 
     def get_readonly(self):
         return self.native.isReadOnly()
@@ -56,9 +47,10 @@ class TextInput(Widget):
 
     def set_text_align(self, value):
         alignment = {
-            LEFT: Qt.AlignLeft,
-            CENTER: Qt.AlignHCenter,
-            RIGHT: Qt.AlignRight,
+            LEFT: Qt.AlignLeft | Qt.AlignVCenter,
+            CENTER: Qt.AlignHCenter | Qt.AlignVCenter,
+            RIGHT: Qt.AlignRight | Qt.AlignVCenter,
+            JUSTIFY: Qt.AlignJustify | Qt.AlignVCenter,
         }.get(value, Qt.AlignLeft)
         self.native.setAlignment(alignment)
 
@@ -76,10 +68,10 @@ class TextInput(Widget):
         self.interface.intrinsic.height = size.height()
 
     def set_error(self, error_message):
-        warnings.warn("set_error stub not implemented", RuntimeWarning)
+        self.interface.factory.not_implemented("validation of textinput")
 
     def clear_error(self):
-        warnings.warn("clear_error stub not implemented", RuntimeWarning)
+        self.interface.factory.not_implemented("validation of textinput")
 
     def is_valid(self):
         return self.native.toolTip() == ""

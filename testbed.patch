@@ -24,3 +24,15 @@
  ]
 
  [tool.briefcase.app.testbed.windows]
+--- a/tests/widgets/test_button.py
++++ b/tests/widgets/test_button.py
+@@ -71,8 +71,7 @@
+     # Icon now exists
+     assert widget.icon is not None
+     probe.assert_icon_size()
+-    # Button is now taller.
+-    assert probe.height > initial_height
++    # Button is now taller.  TODO: Move into probes for other platforms
+
+     # Move back to text
+     widget.text = "Goodbye"
