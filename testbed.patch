@@ -1,3 +1,8 @@
+Mostly manually maintained patchfile
+
+See also togax_qt/togax.py
+Need to get integrated into toga repo
+
 --- a/pyproject.toml
 +++ b/pyproject.toml
 @@ -37,8 +37,8 @@

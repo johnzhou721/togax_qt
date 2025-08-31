@@ -31,19 +31,19 @@ class AppProbe(BaseProbe):
 
     @property
     def config_path(self):
-        return Path.home() / ".config" / "Tiberius Yak" / "Toga Testbed"
+        return Path.home() / ".config/testbed"
 
     @property
     def data_path(self):
-        return Path.home() / ".local/share" / "Tiberius Yak" / "Toga Testbed"
+        return Path.home() / ".local/share/testbed"
 
     @property
     def cache_path(self):
-        return Path.home() / ".cache" / "Tiberius Yak" / "Toga Testbed"
+        return Path.home() / ".cache/testbed"
 
     @property
     def logs_path(self):
-        return self.cache_path / "Logs"
+        return Path.home() / ".local/state/testbed/log"
 
     @property
     def is_cursor_visible(self):

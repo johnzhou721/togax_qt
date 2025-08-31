@@ -52,10 +52,7 @@ classifiers = [
 
 
 [project.entry-points."toga.backends"]
-linux = "togax_qt"
-windows = "togax_qt"
-macOS = "togax_qt"
-freeBSD = "togax_qt"
+linux-kde = "togax_qt"
 
 [tool.coverage.run]
 parallel = true

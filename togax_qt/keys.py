@@ -9,6 +9,7 @@ from toga.keys import Key
 QT_MODIFIERS = {
     Key.MOD_1: Qt.ControlModifier,
     Key.MOD_2: Qt.AltModifier,
+    Key.MOD_3: Qt.MetaModifier,
     Key.SHIFT: Qt.ShiftModifier,
 }
 
@@ -41,8 +42,6 @@ QT_KEYS = {
     Key.LEFT.value: Qt.Key_Left,
     Key.RIGHT.value: Qt.Key_Right,
     Key.NUMLOCK.value: Qt.Key_NumLock,
-    # No idea here, will need a flag with an if?
-    Key.NUMPAD_DECIMAL_POINT.value: Qt.Key_Period | Qt.KeypadModifier,
     Key.SCROLLLOCK.value: Qt.Key_ScrollLock,
     Key.MENU.value: Qt.Key_Menu,
 }
@@ -51,11 +50,7 @@ QT_KEYS = {
 QT_KEYS.update({str(digit): getattr(Qt, f"Key_{digit}") for digit in range(10)})
 
 QT_KEYS.update(
-    {
-        getattr(Key, f"NUMPAD_{digit}").value: getattr(Qt, f"Key_{digit}")
-        | Qt.KeypadModifier
-        for digit in range(10)
-    }
+    {getattr(Key, f"F{num}").value: getattr(Qt, f"Key_F{num}") for num in range(1, 20)}
 )
 
 QT_KEYS.update(
@@ -65,8 +60,20 @@ QT_KEYS.update(
     }
 )
 
+NUMPAD_KEYS = {
+    Key.NUMPAD_DECIMAL_POINT.value: Qt.Key_Period,
+}
+
+NUMPAD_KEYS.update(
+    {
+        getattr(Key, f"NUMPAD_{digit}").value: getattr(Key, f"_{digit}").value
+        for digit in range(10)
+    }
+)
+
+NUMPAD_KEYS_REV = {v: k for k, v in NUMPAD_KEYS.items()}
+
 SHIFTED_KEYS = dict(zip("!@#$%^&*()", "1234567890"))
-SHIFTED_KEYS.update({lower.upper(): lower for lower in ascii_lowercase})
 SHIFTED_KEYS.update(
     {
         "~": "`",
@@ -82,6 +89,9 @@ SHIFTED_KEYS.update(
         "?": "/",
     }
 )
+TEST_SHIFTED_KEYS = {v: k for k, v in SHIFTED_KEYS.items()}
+
+SHIFTED_KEYS.update({lower.upper(): lower for lower in ascii_lowercase})
 
 
 def toga_to_qt_key(key):
@@ -96,6 +106,10 @@ def toga_to_qt_key(key):
         if modifier.value in key:
             codes |= modifier_code
             key = key.replace(modifier.value, "")
+
+    if regular := NUMPAD_KEYS.get(key):
+        key = regular
+        codes |= Qt.KeypadModifier
 
     if lower := SHIFTED_KEYS.get(key):
         key = lower
@@ -116,13 +130,21 @@ def toga_to_qt_key(key):
 
 def qt_to_toga_key(code):
     modifiers = set()
+    native_mods = code[0].keyboardModifiers()
     for mod_key, qt_mod in QT_MODIFIERS.items():
-        if code & qt_mod:
+        if native_mods & qt_mod:
             modifiers.add(mod_key)
-            code &= ~qt_mod
 
-    qt_key_code = code
+    qt_key_code = code[0].key()
     qt_to_toga = {v: k for k, v in QT_KEYS.items()}
     toga_value = qt_to_toga.get(qt_key_code)
+
+    # Qt decomposes shifted characters
+    if Key.SHIFT in modifiers and toga_value in TEST_SHIFTED_KEYS:
+        modifiers.remove(Key.SHIFT)
+        toga_value = TEST_SHIFTED_KEYS[toga_value]
+    # Qt uses a separate modifier for numpad
+    if native_mods & Qt.KeypadModifier:
+        toga_value = NUMPAD_KEYS_REV[toga_value]
 
     return {"key": Key(toga_value), "modifiers": modifiers}
