@@ -68,7 +68,3 @@ source = [
     "src/togax_qt",
     "**/togax_qt",
 ]
-
-
-[tool.setuptools]
-packages = ["togax_qt"]
