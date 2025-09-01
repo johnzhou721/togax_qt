@@ -79,8 +79,8 @@ Need to get integrated into toga repo
 +                task = toga_task_factory(loop, coro, context=context, name=name)
              assert task in self._running_tasks, f"missing task reference for {task}"
              return task
---- a/tests/test_button.py
-+++ b/tests/test_button.py
+--- a/tests/widgets/test_button.py
++++ b/tests/widgets/test_button.py
 @@ -51,2 +51,2 @@
 -        # GTK rendering can result in a very minor change in button height
 -        assert probe.height == approx(initial_height, abs=1)
