@@ -13,16 +13,22 @@ jobs:
       image: ubuntu:25.04
 
     steps:
+      - name: actions/checkout issue 363 workaround
+        run: |
+          apt update
+          apt-get install -y git
+          git config --global --add safe.directory $PWD
+      
       - name: Check out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 0
 
       - name: Test
         run: |
-          apt update
-          apt-get install -y openbox python3 xvfb python3-pip git
-          apt install -y \
+          git describe --dirty --tags --long --abbrev=40 --match '*[0-9]*'
+          apt-get install -y openbox python3 xvfb python3-pip breeze
+          apt-get install -y \
             libpyside6-dev \
             libpyside6-py3-6.8 \
             libshiboken6-dev \
