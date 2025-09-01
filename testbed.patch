@@ -57,7 +57,7 @@ Need to get integrated into toga repo
      current_platform = toga.platform.current_platform
 +    # TEMP HACK FOR KDE SKIPPING
 +    # MIGRATE INTO CORE TOGA PLATFORMS WHEN FINALIZED
-+    if "kde" in os.environ.get("XDG_CURRENT_DESKTOP", "").lower():
++    if "kde" in os.environ.get("XDG_CURRENT_DESKTOP", "").lower() or os.environ.get("TOGA_QT","") == "1":
 +        current_platform = "linux-kde"
      if current_platform in platforms:
          skip(

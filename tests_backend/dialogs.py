@@ -39,7 +39,7 @@ class DialogsMixin:
                     except Exception as e:
                         future.set_exception(e)
 
-            asyncio.create_task(_close_dialog(), name="close-dialog")
+            asyncio.create_task(_close_dialog())
 
         dialog._impl.show = automated_exec
 

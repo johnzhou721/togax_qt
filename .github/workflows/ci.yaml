@@ -18,7 +18,7 @@ jobs:
           apt update
           apt-get install -y git
           git config --global --add safe.directory $PWD
-      
+
       - name: Check out repository
         uses: actions/checkout@v5.0.0
         with:
@@ -55,4 +55,4 @@ jobs:
 
           ./update-testbed.sh
           cd testbed
-          DISPLAY=:99 briefcase run linux --log --test -- tests/app/ tests/window/ tests/test_command.py tests/test_keys.py tests/test_paths.py --ci
+          DISPLAY=:99 briefcase run linux --log --test -- tests/app/ tests/window/ tests/test_command.py tests/test_keys.py tests/test_paths.py tests/widgets/test_button.py tests/widgets/test_box.py tests/widgets/test_base.py --ci
