@@ -1,0 +1,50 @@
+name: Test Backend
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  testbed:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:25.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Test
+        run: |
+          apt update
+          apt-get install -y openbox python3 xvfb python3-pip git
+          apt install -y \
+            libpyside6-dev \
+            libpyside6-py3-6.8 \
+            libshiboken6-dev \
+            libshiboken6-py3-6.8 \
+            pyside6-tools \
+            python-pyside6-doc \
+            shiboken6 \
+            shiboken6-doc \
+            "python3-pyside6.*"
+          alias python="python3"
+
+          # Start Virtual X Server
+          echo "Start X server..."
+          Xvfb :99 -screen 0 2048x1536x24 &
+          sleep 1
+
+          # Start Window Mmanager
+          echo "Start window manager..."
+          DISPLAY=:99 openbox &
+          sleep 1
+
+          # Briefcase
+          python -m pip install --break-system-packages git+https://github.com/beeware/briefcase.git
+
+          ./update-testbed.sh
+          cd testbed
+          DISPLAY=:99 briefcase run linux --log --test -- tests/app/ tests/window/ tests/test_command.py tests/test_keys.py tests/test_paths.py --ci
