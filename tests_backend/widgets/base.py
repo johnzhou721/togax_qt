@@ -1,6 +1,7 @@
 from ..probe import BaseProbe
 import pytest
 from ..fonts import FontMixin
+from pytest import approx
 
 
 class SimpleProbe(BaseProbe, FontMixin):
@@ -55,7 +56,7 @@ class SimpleProbe(BaseProbe, FontMixin):
         assert self.native.parentWidget() is not None
 
         assert (self.native.width(), self.native.height()) == size
-        assert (self.native.pos().x(), self.pos().y()) == position
+        assert (self.native.pos().x(), self.native.pos().y()) == position
 
     async def press(self):
         self.native.click()
@@ -83,7 +84,9 @@ class SimpleProbe(BaseProbe, FontMixin):
 
     @property
     def height(self):
-        return self.native.height()
+        return approx(
+            self.native.height(), abs=2
+        )  # Qt is sort of inaccurate in terms of this
 
     async def undo(self):
         pytest.skip("Undo not supported by default on widgets")
