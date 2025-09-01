@@ -54,6 +54,9 @@ classifiers = [
 [project.entry-points."toga.backends"]
 linux-kde = "togax_qt"
 
+[tool.setuptools_scm]
+root = "."
+
 [tool.coverage.run]
 parallel = true
 branch = true
