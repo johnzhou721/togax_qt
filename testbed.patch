@@ -41,3 +41,24 @@ Need to get integrated into toga repo
 
      # Move back to text
      widget.text = "Goodbye"
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -3,6 +3,7 @@
+ import inspect
+ from dataclasses import dataclass
+ from importlib import import_module
++import os
+
+ from pytest import fixture, register_assert_rewrite, skip
+
+@@ -22,6 +23,10 @@
+ # but could be supported in the future.
+ def skip_on_platforms(*platforms, reason=None, allow_module_level=False):
+     current_platform = toga.platform.current_platform
++    # TEMP HACK FOR KDE SKIPPING
++    # MIGRATE INTO CORE TOGA PLATFORMS WHEN FINALIZED
++    if "kde" in os.environ.get("XDG_CURRENT_DESKTOP", "").lower():
++        current_platform = "linux-kde"
+     if current_platform in platforms:
+         skip(
+             reason or f"not yet implemented on {current_platform}",
