@@ -11,3 +11,5 @@ expert in Qt but haven't seen BeeWare yet), for this repo don't do stupid things
 Currently I'm running by using testapp.py in the current directory without packaging, setting the `TOGA_BACKEND` environment variable appropriately, letting Python use the package in place.
 
 ATTRIBUTION: Lots of code are copied from the official Toga project backends, authored by Dr. Russell Keith-Magee with contributors.
+
+USE EDITABLE INSTALLS TO TEST!
