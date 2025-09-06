@@ -1,3 +1,5 @@
 from PySide6.QtGui import QGuiApplication
 
-IS_WAYLAND = "wayland" == QGuiApplication.platformName()
+
+def get_is_wayland():
+    return "wayland" == QGuiApplication.platformName()

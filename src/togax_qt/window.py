@@ -5,7 +5,7 @@ from toga.types import Position, Size
 from toga.command import Separator
 from .screens import Screen as ScreenImpl
 from .container import Container
-from .libs import IS_WAYLAND
+from .libs import get_is_wayland
 import os
 
 
@@ -208,9 +208,9 @@ class Window:
 
     # =============== WINDOW STATES ================
     def get_window_state(self, in_progress_state=False):
-        if IS_WAYLAND:
+        if get_is_wayland():
             # Upstream Qt bug
-            self.interface.factory.not_implemented("window state read on Wayland")
+            self.interface.factory.not_implemented("window state on Wayland")
             return
 
         window_state = self._hidden_window_state or self.native.windowState()
@@ -228,6 +228,10 @@ class Window:
             return WindowState.NORMAL
 
     def set_window_state(self, state):
+        if get_is_wayland():
+            # Upstream Qt bug prevents getting window state
+            self.interface.factory.not_implemented("window state on Wayland")
+            return
         # Well technically you can do this block below but you can't prevent *user* from minmizin'
         # so we're sort of cooked here with no way to impl this on Qt AT ALL.
         # if not self.interface.minimizable and state == WindowState.MINIMIZED:
