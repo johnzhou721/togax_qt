@@ -39,7 +39,7 @@ class WindowProbe(BaseProbe):
 
     async def wait_for_window(self, message, state=None):
         # Without this somehow an extra spontaneous show normal event is emitted
-        await asyncio.sleep(0)
+        await asyncio.sleep(0.1)
         await self.redraw(message, delay=0.3)
 
         if state:

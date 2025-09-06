@@ -251,6 +251,7 @@ class Window:
         # so we're sort of cooked here with no way to impl non-minimizable on Qt AT ALL.
         # if not self.interface.minimizable and state == WindowState.MINIMIZED:
         #     return
+        print(f"SET STATE {state}")
 
         if (
             self._hidden_window_state
@@ -284,6 +285,7 @@ class Window:
 
         current_state = self.get_window_state()
         if current_state == state:
+            self._pending_state_transition = None
             return
 
         if current_state == WindowState.PRESENTATION:
