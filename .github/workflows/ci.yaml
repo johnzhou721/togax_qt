@@ -14,6 +14,7 @@ jobs:
       image: ubuntu:25.04
     strategy:
       matrix:
+        fail-fast: false
         wm:
           - name: x11
             pkg: openbox
