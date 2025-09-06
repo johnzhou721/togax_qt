@@ -5,6 +5,7 @@ from toga.types import Position, Size
 from toga.command import Separator
 from .screens import Screen as ScreenImpl
 from .container import Container
+from .libs import IS_WAYLAND
 import os
 
 
@@ -207,6 +208,11 @@ class Window:
 
     # =============== WINDOW STATES ================
     def get_window_state(self, in_progress_state=False):
+        if IS_WAYLAND:
+            # Upstream Qt bug
+            self.interface.factory.not_implemented("window state read on Wayland")
+            return
+
         window_state = self._hidden_window_state or self.native.windowState()
 
         if window_state & Qt.WindowFullScreen:

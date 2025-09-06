@@ -11,6 +11,24 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:25.04
+    strategy:
+      matrix:
+        wm:
+          - name: x11
+            pkg: openbox
+            start: |
+              echo "Start window manager..."
+              DISPLAY=:99 openbox &
+              sleep 1
+            runenv: DISPLAY=:99
+          - name: wayland
+            pkg: mutter
+            start: |
+              echo "Start Window Manager..."
+              DISPLAY=:99 MUTTER_DEBUG_DUMMY_MODE_SPECS=2048x1536 \
+                  mutter --nested --wayland --no-x11 --wayland-display toga &
+              sleep 1
+            runenv: WAYLAND_DISPLAY=toga
 
     steps:
       - name: actions/checkout issue 363 workaround
@@ -26,7 +44,7 @@ jobs:
 
       - name: Dependencies
         run: |
-          apt-get install -y openbox python3 xvfb python3-pip breeze
+          apt-get install -y ${{ matrix.wm.pkg }} python3 xvfb python3-pip breeze
           apt-get install -y \
             libpyside6-dev \
             libpyside6-py3-6.8 \
@@ -38,25 +56,23 @@ jobs:
             shiboken6-doc \
             "python3-pyside6.*"
           alias python="python3"
-          # Briefcase
           python -m pip install --break-system-packages git+https://github.com/beeware/briefcase.git
 
       - name: Testing
         run: |
-          # Simulate OS theming configuration.  We don't explicitly set any styles in the framework anymore
-          # as we want user's theming to work
           export QT_STYLE_OVERRIDE=Breeze
 
-          # Start Virtual X Server
           echo "Start X server..."
           Xvfb :99 -screen 0 2048x1536x24 &
           sleep 1
 
-          # Start Window Mmanager
-          echo "Start window manager..."
-          DISPLAY=:99 openbox &
-          sleep 1
+          # Start window manager depending on matrix value
+          ${{ matrix.wm.start }}
 
           ./update-testbed.sh
           cd testbed
-          DISPLAY=:99 briefcase run linux --log --test -- tests/app/ tests/window/ tests/test_command.py tests/test_keys.py tests/test_paths.py tests/widgets/test_button.py tests/widgets/test_box.py tests/widgets/test_base.py --ci
+          ${{ matrix.wm.runenv }} briefcase run linux --log --test -- \
+            tests/app/ tests/window/ tests/test_command.py \
+            tests/test_keys.py tests/test_paths.py \
+            tests/widgets/test_button.py tests/widgets/test_box.py \
+            tests/widgets/test_base.py --ci

@@ -24,7 +24,7 @@ def operate_on_focus(method_name, interface, needwrite=False):
         fn()
 
 
-def _about_dialog(app):
+def _create_about_dialog(app):
     message = f'<h2 style="font-weight: normal; margin-bottom: 0px">{app.interface.formal_name}</h2>'
     versionauthor = []
     if app.interface.version:
@@ -87,7 +87,6 @@ class App:
         self.signalslistener = AppSignalsListener(self)
 
         self.cursorhidden = False
-        self._about_dialog = _about_dialog(self)
 
     ######################################################################
     # Commands and menus
@@ -202,6 +201,9 @@ class App:
         QApplication.beep()
 
     def show_about_dialog(self):
+        # Storing property to facilitate testing
+        # Not creating at start to ensure correct parent
+        self._about_dialog = _create_about_dialog(self)
         self._about_dialog.show()
 
     ######################################################################
