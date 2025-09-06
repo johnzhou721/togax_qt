@@ -25,6 +25,10 @@ jobs:
           - name: wayland
             pkg: mutter
             start: |
+              echo "Set up XDG_RUNTIME_DIR..."
+              export XDG_RUNTIME_DIR=/tmp/runtime-$USER
+              mkdir -p $XDG_RUNTIME_DIR
+              chmod 700 $XDG_RUNTIME_DIR
               echo "Start Window Manager..."
               DISPLAY=:99 MUTTER_DEBUG_DUMMY_MODE_SPECS=2048x1536 \
                   mutter --nested --wayland --no-x11 --wayland-display toga &
@@ -47,15 +51,9 @@ jobs:
         run: |
           apt-get install -y ${{ matrix.wm.pkg }} python3 xvfb python3-pip breeze
           apt-get install -y \
-            libpyside6-dev \
-            libpyside6-py3-6.8 \
-            libshiboken6-dev \
-            libshiboken6-py3-6.8 \
-            pyside6-tools \
-            python-pyside6-doc \
-            shiboken6 \
-            shiboken6-doc \
-            "python3-pyside6.*"
+            python3-pyside6.qtcore \
+            python3-pyside6.qtwidgets \
+            python3-pyside6.qtgui
           alias python="python3"
           python -m pip install --break-system-packages git+https://github.com/beeware/briefcase.git
 
