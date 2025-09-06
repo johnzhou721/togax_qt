@@ -23,8 +23,10 @@ jobs:
               DISPLAY=:99 openbox &
               sleep 1
             runenv: DISPLAY=:99
+          # dbus-x11 provides dbus-launch even though we're doing
+          # wayland stuff here
           - name: wayland
-            pkg: mutter
+            pkg: mutter dbus-x11
             start: |
               echo "Set up dbus..."
               eval "$(dbus-launch --sh-syntax)"
@@ -53,7 +55,7 @@ jobs:
 
       - name: Dependencies
         run: |
-          apt-get install -y ${{ matrix.wm.pkg }} python3 xvfb python3-pip breeze dbus
+          apt-get install -y ${{ matrix.wm.pkg }} python3 xvfb python3-pip breeze
           apt-get install -y \
             python3-pyside6.qtcore \
             python3-pyside6.qtwidgets \
