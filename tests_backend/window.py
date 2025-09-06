@@ -27,7 +27,12 @@ class WindowProbe(BaseProbe):
         self.container = window._impl.container
         assert self.native.isWindow()
         if get_is_wayland():
-            self.supports_placement = False  # returns all sorts of messy values
+            self.supports_placement = (
+                False  # returns all sorts of messy values in CI in mutter
+            )
+            self.supports_focus = (
+                False  # Qt activiateWindow doesn't work with mutter used in CI
+            )
 
     async def wait_for_window(self, message, state=None):
         await self.redraw(message, delay=0.3)
