@@ -40,12 +40,13 @@ jobs:
           alias python="python3"
           # Briefcase
           python -m pip install --break-system-packages git+https://github.com/beeware/briefcase.git
+
+      - name: Testing
+        run: |
           # Simulate OS theming configuration.  We don't explicitly set any styles in the framework anymore
           # as we want user's themeing to work
           export QT_STYLE_OVERRIDE=Breeze
 
-      - name: Testing
-        run: |
           # Start Virtual X Server
           echo "Start X server..."
           Xvfb :99 -screen 0 2048x1536x24 &
