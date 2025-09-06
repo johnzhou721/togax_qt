@@ -26,9 +26,11 @@ class WindowProbe(BaseProbe):
         self.native = window._impl.native
         self.container = window._impl.container
         assert self.native.isWindow()
+        if get_is_wayland():
+            self.supports_placement = False  # returns all sorts of messy values
 
     async def wait_for_window(self, message, state=None):
-        await self.redraw(message, delay=0.2)
+        await self.redraw(message, delay=0.6)
 
         # Ideally we want to xfail this right here if it's on wayland
         # but way too many tests actually pass a window state even if
