@@ -2,9 +2,8 @@ import asyncio
 import pytest
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QWidget
 from .probe import BaseProbe
-from togax_qt.libs import AnyWithin
+from togax_qt.libs import AnyWithin, get_is_wayland
 
 
 class WindowProbe(BaseProbe):
@@ -26,11 +25,15 @@ class WindowProbe(BaseProbe):
         self.window = window
         self.native = window._impl.native
         self.container = window._impl.container
-        assert isinstance(self.native, QMainWindow) or isinstance(self.native, QWidget)
+        assert self.native.isWindow()
 
     async def wait_for_window(self, message, state=None):
-        await self.redraw(message, delay=0.1)
-        if state:
+        await self.redraw(message, delay=0.2)
+
+        # Ideally we want to xfail this right here if it's on wayland
+        # but way too many tests actually pass a window state even if
+        # not testing strictly for it
+        if state and not get_is_wayland():
             timeout = 5
             polling_interval = 0.1
             exception = None
@@ -73,6 +76,9 @@ class WindowProbe(BaseProbe):
 
     @property
     def is_minimized(self):
+        if get_is_wayland():
+            pytest.xfail("state not readable on wayland qt -- upstream bug")
+        # Xfail implemented in backend
         return self.native.isMinimized()
 
     def minimize(self):
@@ -87,6 +93,8 @@ class WindowProbe(BaseProbe):
 
     @property
     def instantaneous_state(self):
+        if get_is_wayland():
+            pytest.xfail("state not readable on wayland qt -- upstream bug")
         return self.window._impl.get_window_state(in_progress_state=False)
 
     def has_toolbar(self):

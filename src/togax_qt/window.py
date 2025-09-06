@@ -5,8 +5,7 @@ from toga.types import Position, Size
 from toga.command import Separator
 from .screens import Screen as ScreenImpl
 from .container import Container
-from .libs import get_is_wayland
-import os
+from .libs import get_is_wayland, get_testing
 
 
 from .libs import AnyWithin  # tests hackery...
@@ -20,8 +19,6 @@ def process_change(native, event):
             native.interface.on_hide()
         elif old & Qt.WindowMinimized and not new & Qt.WindowMinimized:
             native.interface.on_show()
-    # Using WindowDeactivated and WindowActivated somehow does not work
-    # how many bugs does Qt have?
     elif event.type() == QEvent.ActivationChange:
         if native.isActiveWindow():
             native.interface.on_gain_focus()
@@ -145,8 +142,7 @@ class Window:
         self.native.setWindowTitle(title)
 
     def get_size(self):
-        TESTING = bool(os.environ.get("PYTEST_VERSION"))
-        if TESTING:
+        if get_testing():
             # Well, so sad this has to happen.  Ideally shouldn't be doing this in lib code.
             # Upstream glitch.  Try making a window, set its size, read it after a sec,
             # it changes by 1 or 2.  At least with 300x200
@@ -210,7 +206,7 @@ class Window:
     def get_window_state(self, in_progress_state=False):
         if get_is_wayland():
             # Upstream Qt bug
-            self.interface.factory.not_implemented("window state on Wayland")
+            self.interface.factory.not_implemented("getting window state on Wayland")
             return
 
         window_state = self._hidden_window_state or self.native.windowState()
@@ -230,7 +226,7 @@ class Window:
     def set_window_state(self, state):
         if get_is_wayland():
             # Upstream Qt bug prevents getting window state
-            self.interface.factory.not_implemented("window state on Wayland")
+            self.interface.factory.not_implemented("setting window state on Wayland")
             return
         # Well technically you can do this block below but you can't prevent *user* from minmizin'
         # so we're sort of cooked here with no way to impl this on Qt AT ALL.

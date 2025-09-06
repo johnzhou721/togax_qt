@@ -1,3 +1,6 @@
+import os
+
+
 class AnyWithin:
     def __init__(self, low, high):
         self.low = low
@@ -57,3 +60,7 @@ class AnyWithin:
 
     def __repr__(self):
         return f"AnyWithin({self.low}, {self.high})"
+
+
+def get_testing():
+    return bool(os.environ.get("PYTEST_VERSION"))
