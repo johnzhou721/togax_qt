@@ -24,9 +24,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Test
+      - name: Dependencies
         run: |
-          git describe --dirty --tags --long --abbrev=40 --match '*[0-9]*'
           apt-get install -y openbox python3 xvfb python3-pip breeze
           apt-get install -y \
             libpyside6-dev \
@@ -39,7 +38,14 @@ jobs:
             shiboken6-doc \
             "python3-pyside6.*"
           alias python="python3"
+          # Briefcase
+          python -m pip install --break-system-packages git+https://github.com/beeware/briefcase.git
+          # Simulate OS theming configuration.  We don't explicitly set any styles in the framework anymore
+          # as we want user's themeing to work
+          export QT_STYLE_OVERRIDE=Breeze
 
+      - name: Testing
+        run: |
           # Start Virtual X Server
           echo "Start X server..."
           Xvfb :99 -screen 0 2048x1536x24 &
@@ -49,9 +55,6 @@ jobs:
           echo "Start window manager..."
           DISPLAY=:99 openbox &
           sleep 1
-
-          # Briefcase
-          python -m pip install --break-system-packages git+https://github.com/beeware/briefcase.git
 
           ./update-testbed.sh
           cd testbed
