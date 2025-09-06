@@ -13,8 +13,8 @@ jobs:
     container:
       image: ubuntu:25.04
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         wm:
           - name: x11
             pkg: openbox
