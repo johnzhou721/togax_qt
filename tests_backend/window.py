@@ -4,6 +4,7 @@ import pytest
 from PySide6.QtCore import Qt
 from .probe import BaseProbe
 from togax_qt.libs import AnyWithin, get_is_wayland
+from toga import WindowState
 
 
 class WindowProbe(BaseProbe):
@@ -41,6 +42,8 @@ class WindowProbe(BaseProbe):
         # Without this somehow an extra spontaneous show normal event is emitted
         await asyncio.sleep(0.1)
         await self.redraw(message, delay=0.3)
+        if state == WindowState.MINIMIZED and get_is_wayland():
+            state = WindowState.NORMAL
 
         if state:
             timeout = 5
