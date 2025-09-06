@@ -44,7 +44,7 @@ jobs:
       - name: Testing
         run: |
           # Simulate OS theming configuration.  We don't explicitly set any styles in the framework anymore
-          # as we want user's themeing to work
+          # as we want user's theming to work
           export QT_STYLE_OVERRIDE=Breeze
 
           # Start Virtual X Server
