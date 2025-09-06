@@ -33,12 +33,14 @@ class WindowProbe(BaseProbe):
             self.supports_focus = (
                 False  # Qt activiateWindow doesn't work with mutter used in CI
             )
+            # Qt upstream bug
+            self.supports_unminimize = False
+            self.supports_minimize = False
 
     async def wait_for_window(self, message, state=None):
+        # Without this somehow an extra spontaneous show normal event is emitted
+        await asyncio.sleep(0)
         await self.redraw(message, delay=0.3)
-
-        if get_is_wayland() and message == "Resetting main_window":
-            return  # Wayland has no support for window states but don't let this xfail everything
 
         if state:
             timeout = 5
@@ -83,9 +85,6 @@ class WindowProbe(BaseProbe):
 
     @property
     def is_minimized(self):
-        if get_is_wayland():
-            pytest.xfail("state not readable on wayland qt -- upstream bug")
-        # Xfail implemented in backend
         return self.native.isMinimized()
 
     def minimize(self):
@@ -100,8 +99,6 @@ class WindowProbe(BaseProbe):
 
     @property
     def instantaneous_state(self):
-        if get_is_wayland():
-            pytest.xfail("state not readable on wayland qt -- upstream bug")
         return self.window._impl.get_window_state(in_progress_state=False)
 
     def has_toolbar(self):
