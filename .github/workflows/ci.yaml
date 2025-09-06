@@ -8,6 +8,7 @@ on:
 
 jobs:
   testbed:
+    name: Testbed - ${{ matrix.wm.name }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu:25.04
