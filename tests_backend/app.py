@@ -12,12 +12,13 @@ from PySide6.QtCore import Qt
 from togax_qt.keys import toga_to_qt_key, qt_to_toga_key
 
 from .probe import BaseProbe
+from togax_qt.libs import get_is_wayland
 
 
 class AppProbe(BaseProbe):
     supports_key = True
     supports_key_mod3 = True
-    supports_current_window_assignment = False
+    supports_current_window_assignment = True
     supports_dark_mode = True
 
     def __init__(self, app):
@@ -29,6 +30,9 @@ class AppProbe(BaseProbe):
         assert isinstance(QApplication.instance(), QApplication)
         # and the clouds are moving on with every autumn...
         assert self.native.style().objectName() == "breeze"
+        # KWin supports this but not mutter which is used in CI.
+        if get_is_wayland():
+            self.supports_current_window_assignment = False
 
     @property
     def config_path(self):

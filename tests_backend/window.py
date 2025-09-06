@@ -30,12 +30,12 @@ class WindowProbe(BaseProbe):
             self.supports_placement = False  # returns all sorts of messy values
 
     async def wait_for_window(self, message, state=None):
-        await self.redraw(message, delay=0.6)
+        await self.redraw(message, delay=0.3)
 
-        # Ideally we want to xfail this right here if it's on wayland
-        # but way too many tests actually pass a window state even if
-        # not testing strictly for it
-        if state and not get_is_wayland():
+        if get_is_wayland() and message == "Resetting main_window":
+            return  # Wayland has no support for window states but don't let this xfail everything
+
+        if state:
             timeout = 5
             polling_interval = 0.1
             exception = None
