@@ -5,7 +5,7 @@ Written with haste. Expect hundreds of errors.
 from pathlib import Path
 
 import pytest
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QDialog
 from PySide6.QtGui import QCursor
 from PySide6.QtCore import Qt
 
@@ -25,6 +25,7 @@ class AppProbe(BaseProbe):
         self.app = app
         self.main_window = app.main_window
         self.native = self.app._impl.native
+        self.impl = self.app._impl
         assert isinstance(QApplication.instance(), QApplication)
         # and the clouds are moving on with every autumn...
         assert self.native.style().objectName() == "breeze"
@@ -84,7 +85,7 @@ class AppProbe(BaseProbe):
         self._activate_menu_item(["Help", "About Toga Testbed"])
 
     async def close_about_dialog(self):
-        raise pytest.skip("About dialog not implemented")
+        self.impl._about_dialog.done(QDialog.DialogCode.Accepted)
 
     def activate_menu_visit_homepage(self):
         raise pytest.xfail("Qt apps do not have Visit Homepage")

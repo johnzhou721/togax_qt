@@ -1,6 +1,7 @@
-from PySide6.QtCore import Qt, QObject, Signal, QTimer
+from PySide6.QtCore import Qt, QObject, Signal, QTimer, QSize
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QGuiApplication, QIcon, QCursor
+from PySide6.QtWidgets import QMessageBox
 from qasync import QEventLoop
 
 import asyncio
@@ -21,6 +22,32 @@ def operate_on_focus(method_name, interface, needwrite=False):
     fn = getattr(fw, method_name, None)
     if callable(fn):
         fn()
+
+
+def _about_dialog(app):
+    message = f'<h2 style="font-weight: normal; margin-bottom: 0px">{app.interface.formal_name}</h2>'
+    versionauthor = []
+    if app.interface.version:
+        versionauthor.append(f"Version {app.interface.version}")
+    if app.interface.author:
+        versionauthor.append(f"Copyright \u00a9 {app.interface.author}")
+    if versionauthor != []:
+        message += f"<p>{'<br>'.join(versionauthor)}</p>"
+    if app.interface.home_page:
+        message += (
+            f"<p><a href={app.interface.home_page}>{app.interface.home_page}</a></p>"
+        )
+    dialog = QMessageBox(
+        QMessageBox.Information,
+        app.interface.formal_name,
+        message,
+        QMessageBox.NoButton,
+        app.get_current_window(),
+    )
+    icon = dialog.windowIcon()
+    dialog.setIconPixmap(icon.pixmap(icon.actualSize(QSize(64, 64))))
+    dialog.setModal(False)
+    return dialog
 
 
 class AppSignalsListener(QObject):
@@ -60,8 +87,7 @@ class App:
         self.signalslistener = AppSignalsListener(self)
 
         self.cursorhidden = False
-
-        self.native.setStyle("Breeze")
+        self._about_dialog = _about_dialog(self)
 
     ######################################################################
     # Commands and menus
@@ -175,10 +201,8 @@ class App:
     def beep(self):
         QApplication.beep()
 
-    # TODO: Add Icon, make tabs, version
     def show_about_dialog(self):
-        print("NOT IMPLD: ABOUT DIALOG")
-        pass
+        self._about_dialog.show()
 
     ######################################################################
     # Cursor control

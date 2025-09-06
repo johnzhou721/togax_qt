@@ -34,7 +34,9 @@ class DialogsMixin:
                             # This is nessacary because else the dialog simply won't show up.
                             # Won't be an issue with public API because if you didn't show, no user
                             # could dismiss it and the call can't complete.
-                            await asyncio.sleep(0.1)
+                            await self.redraw(
+                                "Dialog Internal: Just before close", delay=0.1
+                            )
                             self._default_close_handler(dialog, qt_result)
                     except Exception as e:
                         future.set_exception(e)

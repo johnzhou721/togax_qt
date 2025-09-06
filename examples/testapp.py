@@ -147,6 +147,8 @@ def main():
         "Temperature Converter",
         "org.beeware.toga.examples.tutorial",
         home_page="https://github.com/johnzhou721",
+        version="1.1",
+        author="John",
     )
     cmd = toga.Command.standard(app, toga.Command.PREFERENCES)
     app.commands.add(cmd)

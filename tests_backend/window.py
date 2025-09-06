@@ -39,7 +39,6 @@ class WindowProbe(BaseProbe):
             while (loop.time() - start_time) < timeout:
                 try:
                     assert self.instantaneous_state == state
-                    print("Try to assert")
                     return
                 except AssertionError as e:
                     exception = e
