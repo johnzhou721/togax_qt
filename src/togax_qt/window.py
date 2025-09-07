@@ -25,10 +25,10 @@ def process_change(native, event):
             native.interface.on_show()
         impl = native.impl
         current_state = impl.get_window_state()
-        print(f"CALLBACKX {current_state}")
+        # print(f"CALLBACKX {current_state}")
         if current_state != _APPLIED_STATE:
             return  # Somehow sometimes Qt generates extra events.  Discard them.
-        print(f"CALLBACK {current_state}")
+        # print(f"CALLBACK {current_state}")
         _APPLIED_STATE = None
         if impl._pending_state_transition:
             if current_state != WindowState.NORMAL:
@@ -258,7 +258,7 @@ class Window:
         # so we're sort of cooked here with no way to impl non-minimizable on Qt AT ALL.
         # if not self.interface.minimizable and state == WindowState.MINIMIZED:
         #     return
-        print(f"SET STATE {state}")
+        # print(f"SET STATE {state}")
 
         if (
             self._hidden_window_state
@@ -270,7 +270,7 @@ class Window:
             self._pending_state_transition = state
             return
 
-        print("SET WINDOW STATE")
+        # print("SET WINDOW STATE")
 
         # Exit app presentation mode if another window is in it
         if any(
@@ -288,7 +288,7 @@ class Window:
     def _apply_state(self, state):
         global _APPLIED_STATE
         _APPLIED_STATE = state
-        print(f"APPLY {state}")
+        # print(f"APPLY {state}")
         if state is None:
             return
 
