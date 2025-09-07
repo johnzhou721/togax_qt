@@ -11,8 +11,11 @@ from functools import partial
 
 from .libs import AnyWithin  # tests hackery...
 
+_APPLIED_STATE = None
+
 
 def process_change(native, event):
+    global _APPLIED_STATE
     if event.type() == QEvent.WindowStateChange:
         old = event.oldState()
         new = native.windowState()
@@ -22,7 +25,11 @@ def process_change(native, event):
             native.interface.on_show()
         impl = native.impl
         current_state = impl.get_window_state()
+        print(f"CALLBACKX {current_state}")
+        if current_state != _APPLIED_STATE:
+            return  # Somehow sometimes Qt generates extra events.  Discard them.
         print(f"CALLBACK {current_state}")
+        _APPLIED_STATE = None
         if impl._pending_state_transition:
             if current_state != WindowState.NORMAL:
                 if impl._pending_state_transition != current_state:
@@ -279,6 +286,8 @@ class Window:
             self._apply_state(state)
 
     def _apply_state(self, state):
+        global _APPLIED_STATE
+        _APPLIED_STATE = state
         print(f"APPLY {state}")
         if state is None:
             return
