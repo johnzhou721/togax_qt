@@ -4,7 +4,7 @@ import pytest
 from PySide6.QtCore import Qt
 from .probe import BaseProbe
 from togax_qt.libs import AnyWithin, get_is_wayland
-from toga import WindowState
+from toga.constants import WindowState
 
 
 class WindowProbe(BaseProbe):
