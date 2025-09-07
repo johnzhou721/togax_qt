@@ -1,9 +1,9 @@
 from travertino.size import at_least
-from travertino.constants import LEFT, CENTER, RIGHT, JUSTIFY
 
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QLineEdit
+from PySide6.QtWidgets import QLineEdit, QApplication, QStyle
+from travertino.constants import CENTER
 from .base import Widget
+from ..libs import qt_text_align
 
 
 class TogaLineEdit(QLineEdit):
@@ -32,6 +32,11 @@ class TogaLineEdit(QLineEdit):
 class TextInput(Widget):
     def create(self):
         self.native = TogaLineEdit(self)
+        warning_icon = QApplication.style().standardIcon(QStyle.SP_MessageBoxWarning)
+        self.icon_action = self.native.addAction(
+            warning_icon, QLineEdit.TrailingPosition
+        )
+        self.icon_action.setVisible(False)
 
     def get_readonly(self):
         return self.native.isReadOnly()
@@ -46,13 +51,7 @@ class TextInput(Widget):
         self.native.setPlaceholderText(value)
 
     def set_text_align(self, value):
-        alignment = {
-            LEFT: Qt.AlignLeft | Qt.AlignVCenter,
-            CENTER: Qt.AlignHCenter | Qt.AlignVCenter,
-            RIGHT: Qt.AlignRight | Qt.AlignVCenter,
-            JUSTIFY: Qt.AlignJustify | Qt.AlignVCenter,
-        }.get(value, Qt.AlignLeft)
-        self.native.setAlignment(alignment)
+        self.native.setAlignment(qt_text_align(value, CENTER))
 
     def get_value(self):
         return self.native.text()
@@ -68,10 +67,11 @@ class TextInput(Widget):
         self.interface.intrinsic.height = size.height()
 
     def set_error(self, error_message):
-        self.interface.factory.not_implemented("validation of textinput")
+        self.icon_action.setToolTip(error_message)
+        self.icon_action.setVisible(True)
 
     def clear_error(self):
-        self.interface.factory.not_implemented("validation of textinput")
+        self.icon_action.setVisible(False)
 
     def is_valid(self):
-        return self.native.toolTip() == ""
+        return not self.icon_action.isVisible()

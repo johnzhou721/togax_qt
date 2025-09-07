@@ -80,4 +80,5 @@ jobs:
             tests/app/ tests/window/ tests/test_command.py \
             tests/test_keys.py tests/test_paths.py \
             tests/widgets/test_button.py tests/widgets/test_box.py \
-            tests/widgets/test_base.py --ci
+            tests/widgets/test_base.py tests/widgets/test_textinput.py \
+            tests/widgets/test_label.py --ci

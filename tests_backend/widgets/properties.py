@@ -26,4 +26,4 @@ def toga_y_text_align(alignment):
     elif alignment & Qt.AlignBottom:
         return BOTTOM
     else:
-        pytest.fail(f"Qt alignment {alignment} cannot be interpreted as horizontal")
+        pytest.fail(f"Qt alignment {alignment} cannot be interpreted as vertical")
