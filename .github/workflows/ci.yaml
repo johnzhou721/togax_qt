@@ -59,7 +59,8 @@ jobs:
           apt-get install -y \
             python3-pyside6.qtcore \
             python3-pyside6.qtwidgets \
-            python3-pyside6.qtgui
+            python3-pyside6.qtgui \
+            python3-pyside6.qtquickwidgets
           alias python="python3"
           python -m pip install --break-system-packages git+https://github.com/beeware/briefcase.git
 

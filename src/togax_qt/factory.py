@@ -10,12 +10,14 @@ from .widgets.button import Button
 from .widgets.box import Box
 from .fonts import Font
 from .container import Container
+from .widgets.activityindicator import ActivityIndicator
 from .widgets.label import Label
 from .widgets.textinput import TextInput
 from . import dialogs  # noqa
 
 __all__ = [
     "not_implemented",
+    "ActivityIndicator",
     "App",
     "Paths",
     "Icon",

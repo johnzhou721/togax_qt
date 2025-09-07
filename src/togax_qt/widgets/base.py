@@ -80,8 +80,11 @@ class Widget:
 
     def set_hidden(self, hidden):
         if self.container is not None:
-            self.native.setHidden(hidden)
+            self._apply_hidden(hidden)
         self._hidden = hidden
+
+    def _apply_hidden(self, hidden):
+        self.native.setHidden(hidden)
 
     def set_color(self, color):
         # Not implemented yet
