@@ -83,4 +83,5 @@ jobs:
             tests/widgets/test_button.py tests/widgets/test_box.py \
             tests/widgets/test_base.py tests/widgets/test_textinput.py \
             tests/widgets/test_label.py tests/widgets/test_activityindicator.py \
+            tests/test_fonts.py \
             --ci
