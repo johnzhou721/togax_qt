@@ -39,8 +39,8 @@ class WindowProbe(BaseProbe):
             self.supports_minimize = False
 
     async def wait_for_window(self, message, state=None):
-        # Without this somehow an extra spontaneous show normal event is emitted
-        await asyncio.sleep(0)
+        # Wait for composite transitions to finish the delay bee-fore repaint
+        await asyncio.sleep(0.1)
         await self.redraw(message, delay=0.3)
         if state == WindowState.MINIMIZED and get_is_wayland():
             state = WindowState.NORMAL

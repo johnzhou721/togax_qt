@@ -26,7 +26,7 @@ MODIFIER_MAP = {
 class BaseProbe(DialogsMixin):
     async def redraw(self, message=None, delay=0):
         for widget in QApplication.allWidgets():
-            widget.repaint()
+            widget.repaint()  # this is immediate and will block
 
         # Wait a second... (pun intended)
         if toga.App.app.run_slow:

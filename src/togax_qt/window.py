@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt, QEvent, QTimer
-from PySide6.QtWidgets import QMainWindow, QMenu, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QMainWindow, QMenu, QWidget, QVBoxLayout, QApplication
 from toga.constants import WindowState
 from toga.types import Position, Size
 from toga.command import Separator
@@ -11,11 +11,18 @@ from functools import partial
 
 from .libs import AnyWithin  # tests hackery...
 
-_APPLIED_STATE = None
+
+def _handle_statechange(impl):
+    current_state = impl.get_window_state()
+    print("CALLBACK", current_state)
+    if impl._pending_state_transition:
+        if impl._pending_state_transition != current_state:
+            impl._apply_state(impl._pending_state_transition)
+        else:
+            impl._pending_state_transition = None
 
 
 def process_change(native, event):
-    global _APPLIED_STATE
     if event.type() == QEvent.WindowStateChange:
         old = event.oldState()
         new = native.windowState()
@@ -24,27 +31,9 @@ def process_change(native, event):
         elif old & Qt.WindowMinimized and not new & Qt.WindowMinimized:
             native.interface.on_show()
         impl = native.impl
-        current_state = impl.get_window_state()
-        # print(f"CALLBACKX {current_state}")
-        if current_state != _APPLIED_STATE:
-            return  # Somehow sometimes Qt generates extra events.  Discard them.
-        # print(f"CALLBACK {current_state}")
-        _APPLIED_STATE = None
-        if impl._pending_state_transition:
-            if current_state != WindowState.NORMAL:
-                if impl._pending_state_transition != current_state:
-                    # if we don't do singleShot somehow we don't get another callback...
-                    # no idea why, maybe analogous to the GTK situation?
-                    # No time to test x11 so do this for both wayland and x11
-                    QTimer.singleShot(
-                        20, partial(impl._apply_state, WindowState.NORMAL)
-                    )
-                else:
-                    impl._pending_state_transition = None
-            else:
-                QTimer.singleShot(
-                    20, partial(impl._apply_state, impl._pending_state_transition)
-                )
+        # Handle this later as the states etc may not have been fully realized.
+        # I have no idea why 100ms is needed here.
+        QTimer.singleShot(100, partial(_handle_statechange, impl))
     elif event.type() == QEvent.ActivationChange:
         if native.isActiveWindow():
             native.interface.on_gain_focus()
@@ -278,17 +267,11 @@ class Window:
             for window in self.interface.app.windows
         ):
             self.interface.app.exit_presentation_mode()
-
         self._pending_state_transition = state
-        if self.get_window_state() != WindowState.NORMAL:
-            self._apply_state(WindowState.NORMAL)
-        else:
-            self._apply_state(state)
+        self._apply_state(state)
 
     def _apply_state(self, state):
-        global _APPLIED_STATE
-        _APPLIED_STATE = state
-        # print(f"APPLY {state}")
+        print(f"APPLY {state}")
         if state is None:
             return
 
@@ -326,6 +309,8 @@ class Window:
 
         else:
             self.native.showNormal()
+
+        QApplication.processEvents()
 
     # ============== STUB =============
 
