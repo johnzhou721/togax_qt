@@ -17,10 +17,10 @@ jobs:
       matrix:
         wm:
           - name: x11
-            pkg: kwin-x11
+            pkg: blackbox
             start: |
               echo "Start window manager..."
-              DISPLAY=:99 kwin_x11 --replace --no-xwayland &
+              DISPLAY=:99 blackbox &
               sleep 1
             runenv: DISPLAY=:99
           # dbus-x11 provides dbus-launch even though we're doing
