@@ -1,11 +1,12 @@
 from PySide6.QtCore import Qt, QEvent, QTimer
 from PySide6.QtWidgets import QMainWindow, QMenu, QWidget, QVBoxLayout, QApplication
+from PySide6.QtGui import QWindowStateChangeEvent
 from toga.constants import WindowState
 from toga.types import Position, Size
 from toga.command import Separator
 from .screens import Screen as ScreenImpl
 from .container import Container
-from .libs import get_testing
+from .libs import get_testing, get_is_wayland
 from functools import partial
 
 
@@ -33,7 +34,10 @@ def process_change(native, event):
         impl = native.impl
         # Handle this later as the states etc may not have been fully realized.
         # I have no idea why 100ms is needed here.
-        QTimer.singleShot(100, partial(_handle_statechange, impl))
+        if get_is_wayland():
+            QTimer.singleShot(100, partial(_handle_statechange, impl))
+        else:
+            _handle_statechange(impl)
     elif event.type() == QEvent.ActivationChange:
         if native.isActiveWindow():
             native.interface.on_gain_focus()
@@ -276,6 +280,7 @@ class Window:
             return
 
         current_state = self.get_window_state()
+        current_native_state = self.native.windowState()
         if current_state == state:
             self._pending_state_transition = None
             return
@@ -295,6 +300,10 @@ class Window:
 
         elif state == WindowState.FULLSCREEN:
             self.native.showFullScreen()
+            if current_state == WindowState.PRESENTATION:
+                QApplication.sendEvent(
+                    self.native, QWindowStateChangeEvent(current_native_state)
+                )
 
         elif state == WindowState.PRESENTATION:
             self._before_presentation_mode_screen = self.interface.screen
@@ -306,6 +315,10 @@ class Window:
             # presentation mode
             self._in_presentation_mode = True
             self.native.showFullScreen()
+            if current_state == WindowState.FULLSCREEN:
+                QApplication.sendEvent(
+                    self.native, QEvent.WindowStateChange(current_native_state)
+                )
 
         else:
             self.native.showNormal()
