@@ -36,8 +36,6 @@ def process_change(native, event):
         # I have no idea why 100ms is needed here.
         if get_is_wayland():
             QTimer.singleShot(100, partial(_handle_statechange, impl))
-        else:
-            _handle_statechange(impl)
     elif event.type() == QEvent.ActivationChange:
         if native.isActiveWindow():
             native.interface.on_gain_focus()
@@ -271,7 +269,9 @@ class Window:
             for window in self.interface.app.windows
         ):
             self.interface.app.exit_presentation_mode()
-        self._pending_state_transition = state
+
+        if get_is_wayland():
+            self._pending_state_transition = state
         self._apply_state(state)
 
     def _apply_state(self, state):
@@ -281,6 +281,8 @@ class Window:
 
         current_state = self.get_window_state()
         current_native_state = self.native.windowState()
+        if current_state == WindowState.MINIMIZED and not get_is_wayland():
+            self.native.showNormal()
         if current_state == state:
             self._pending_state_transition = None
             return
@@ -296,6 +298,9 @@ class Window:
             self.native.showMaximized()
 
         elif state == WindowState.MINIMIZED:
+            print("SHOW MIN")
+            if not get_is_wayland():
+                self.native.showNormal()
             self.native.showMinimized()
 
         elif state == WindowState.FULLSCREEN:
