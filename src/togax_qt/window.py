@@ -27,6 +27,7 @@ def process_change(native, event):
     if event.type() == QEvent.WindowStateChange:
         old = event.oldState()
         new = native.windowState()
+        print(old, new)
         if not old & Qt.WindowMinimized and new & Qt.WindowMinimized:
             native.interface.on_hide()
         elif old & Qt.WindowMinimized and not new & Qt.WindowMinimized:
