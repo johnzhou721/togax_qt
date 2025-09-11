@@ -15,7 +15,6 @@ from .libs import AnyWithin  # tests hackery...
 
 def _handle_statechange(impl):
     current_state = impl.get_window_state()
-    print("CALLBACK", current_state)
     if impl._pending_state_transition:
         if impl._pending_state_transition != current_state:
             impl._apply_state(impl._pending_state_transition)
@@ -27,7 +26,6 @@ def process_change(native, event):
     if event.type() == QEvent.WindowStateChange:
         old = event.oldState()
         new = native.windowState()
-        print(old, new)
         if not old & Qt.WindowMinimized and new & Qt.WindowMinimized:
             native.interface.on_hide()
         elif old & Qt.WindowMinimized and not new & Qt.WindowMinimized:
@@ -276,7 +274,6 @@ class Window:
         self._apply_state(state)
 
     def _apply_state(self, state):
-        print(f"APPLY {state}")
         if state is None:
             return
 
