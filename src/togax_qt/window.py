@@ -317,7 +317,7 @@ class Window:
             self.native.showFullScreen()
             if current_state == WindowState.FULLSCREEN:
                 QApplication.sendEvent(
-                    self.native, QEvent.WindowStateChange(current_native_state)
+                    self.native, QWindowStateChangeEvent(current_native_state)
                 )
 
         else:
