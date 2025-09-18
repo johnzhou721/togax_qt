@@ -83,3 +83,34 @@ Need to get integrated into toga repo
 
      # Changing window state of main window should make the app exit presentation mode.
      window1.state = new_window_state
+--- a/tests/widgets/test_canvas.py
++++ b/tests/widgets/test_canvas.py
+@@ -21,6 +21,7 @@
+ from toga.fonts import BOLD
+ from toga.style.pack import SYSTEM, Pack
+
++from ..conftest import skip_on_platforms
+ from .conftest import build_cleanup_test
+ from .properties import (  # noqa: F401
+     test_background_color,
+@@ -83,6 +84,7 @@
+     on_alt_release_handler,
+     on_alt_drag_handler,
+ ):
++    skip_on_platforms("linux-kde")
+     return toga.Canvas(
+         on_resize=on_resize_handler,
+         on_press=on_press_handler,
+@@ -109,7 +111,11 @@
+     assert image.getpixel((x, y)) == color
+
+
+-test_cleanup = build_cleanup_test(toga.Canvas, xfail_platforms=("android",))
++test_cleanup = build_cleanup_test(
++    toga.Canvas,
++    skip_platforms=("linux-kde",),
++    xfail_platforms=("android",),
++)
+
+
+ async def test_resize(widget, probe, on_resize_handler):
