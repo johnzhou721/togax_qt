@@ -43,4 +43,7 @@ class IconProbe(BaseProbe):
         pytest.xfail("Qt does not use sized icons")
 
     def assert_app_icon_content(self):
-        pytest.xfail("Android apps don't have app icons at runtime")
+        if Path(sys.executable).stem.startswith("python"):
+            assert self.icon._impl == toga.Icon.DEFAULT_ICON._impl
+        else:
+            assert self.icon._impl.path == Path(sys.executable).parent.parent / "share/icons/hicolor/512x512/apps/org.beeware.toga.testbed.png"
