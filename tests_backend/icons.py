@@ -40,7 +40,7 @@ class IconProbe(BaseProbe):
         )
 
     def assert_platform_icon_content(self):
-        raise pytest.xfail("Qt does not use sized icons")
+        pytest.xfail("Qt does not use sized icons")
 
     def assert_app_icon_content(self):
         pytest.xfail("Android apps don't have app icons at runtime")
