@@ -13,8 +13,10 @@ from functools import partial
 from .libs import AnyWithin  # tests hackery...
 
 
-def _handle_statechange(impl):
+def _handle_statechange(impl, changeid):
     current_state = impl.get_window_state()
+    if changeid != impl._changeventid:  # not the latest state change
+        pass  # handle it after the next state change event is ready to process
     if impl._pending_state_transition:
         if impl._pending_state_transition != current_state:
             impl._apply_state(impl._pending_state_transition)
@@ -33,8 +35,11 @@ def process_change(native, event):
         impl = native.impl
         # Handle this later as the states etc may not have been fully realized.
         # I have no idea why 100ms is needed here.
+        impl._changeventid += 1
         if get_is_wayland():
-            QTimer.singleShot(100, partial(_handle_statechange, impl))
+            QTimer.singleShot(
+                100, partial(_handle_statechange, impl, impl._changeventid)
+            )
     elif event.type() == QEvent.ActivationChange:
         if native.isActiveWindow():
             native.interface.on_gain_focus()
@@ -79,6 +84,7 @@ class Window:
         self.interface._impl = self
         self.container = Container(on_refresh=self.container_refreshed)
         self.container.native.show()
+        self._changeventid = 0
 
         self.create()
 
