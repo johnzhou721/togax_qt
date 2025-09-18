@@ -9,7 +9,7 @@ IMPL_DICT = {}
 
 
 class Icon:
-    EXTENSIONS = [".png", ".jpeg", ".jpg", ".gif", ".bmp"]
+    EXTENSIONS = [".png", ".jpeg", ".jpg", ".gif", ".bmp", ".ico"]
     SIZES = None
 
     def __init__(self, interface, path):
@@ -29,8 +29,13 @@ class Icon:
             if not sizes:
                 raise FileNotFoundError("No icon variants found")
 
-            self.native = QIcon(str(sizes[max(sizes)]))
-        else:
-            self.native = QIcon(str(path))
+            path = sizes[max(sizes)]
+
+        self.native = QIcon(str(path))
+
+        if self.native.isNull():
+            raise ValueError(f"Unable to load icon from {path}")
 
         IMPL_DICT[self.native] = self
+
+        self.path = path

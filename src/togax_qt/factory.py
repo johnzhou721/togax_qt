@@ -3,6 +3,7 @@ from . import initialization  # noqa: F401
 from .app import App
 from .paths import Paths
 from .icons import Icon
+from .images import Image
 from .statusicons import MenuStatusIcon, SimpleStatusIcon, StatusIconSet
 from .window import MainWindow, Window
 from .command import Command
@@ -21,6 +22,7 @@ __all__ = [
     "App",
     "Paths",
     "Icon",
+    "Image",
     "MenuStatusIcon",
     "SimpleStatusIcon",
     "StatusIconSet",

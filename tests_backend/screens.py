@@ -4,6 +4,8 @@ from toga.images import Image as TogaImage
 
 from .probe import BaseProbe
 
+from togax_qt.libs import get_is_wayland
+
 
 class ScreenProbe(BaseProbe):
     def __init__(self, screen):
@@ -13,4 +15,7 @@ class ScreenProbe(BaseProbe):
         self.native = screen._impl.native
 
     def get_screenshot(self, format=TogaImage):
-        pytest.skip("Images aren't implemented yet'")
+        if get_is_wayland():
+            pytest.xfail("Cannot get image in Qt using conventional APIs of screen")
+        else:
+            return self.screen.as_image(format=format)

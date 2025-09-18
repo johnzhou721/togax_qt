@@ -5,6 +5,7 @@ from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication
 from .dialogs import DialogsMixin
+from pytest import approx
 
 SPECIAL_KEY_MAP = {
     " ": Qt.Key_Space,
@@ -37,7 +38,9 @@ class BaseProbe(DialogsMixin):
             await asyncio.sleep(delay)
 
     def assert_image_size(self, image_size, size, screen):
-        assert image_size == size
+        assert (
+            approx(image_size, abs=1) == size * screen._impl.native.devicePixelRatio()
+        )
 
     async def type_character(self, char, *, shift=False, ctrl=False, alt=False):
         widget = QApplication.focusWidget()
