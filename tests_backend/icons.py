@@ -4,6 +4,8 @@ import pytest
 from PySide6.QtGui import QIcon
 
 import togax_qt
+import toga
+import sys
 
 from .probe import BaseProbe
 
@@ -46,4 +48,8 @@ class IconProbe(BaseProbe):
         if Path(sys.executable).stem.startswith("python"):
             assert self.icon._impl == toga.Icon.DEFAULT_ICON._impl
         else:
-            assert self.icon._impl.path == Path(sys.executable).parent.parent / "share/icons/hicolor/512x512/apps/org.beeware.toga.testbed.png"
+            assert (
+                self.icon._impl.path
+                == Path(sys.executable).parent.parent
+                / "share/icons/hicolor/512x512/apps/org.beeware.toga.testbed.png"
+            )
