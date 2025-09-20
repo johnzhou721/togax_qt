@@ -1,8 +1,11 @@
-# ARCHIVED
+ARCHIVED
+=================
+
 
 This code is in the process of integration into Toga official as a backend
 
-## HISTORICAL README
+HISTORICAL README
+------------
 
 A pretty much not working Toga Qt backend I'm starting.
 
